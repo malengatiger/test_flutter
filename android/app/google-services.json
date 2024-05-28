@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "806811639009",
+    "project_id": "busha-2024",
+    "storage_bucket": "busha-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806811639009:android:6d389c1abbb764c8ceaba0",
+        "android_client_info": {
+          "package_name": "com.boha.busha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZkbrjSz_Ybj6Fuc8mu71cv8BnilzFWVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
