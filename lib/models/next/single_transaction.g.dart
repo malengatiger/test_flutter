@@ -1,21 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'transaction.dart';
+part of 'single_transaction.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
+SingleTransaction _$SingleTransactionFromJson(Map<String, dynamic> json) =>
+    SingleTransaction(
       hash: json['hash'] as String?,
       ver: (json['ver'] as num?)?.toInt(),
       vinSz: (json['vin_sz'] as num?)?.toInt(),
       voutSz: (json['vout_sz'] as num?)?.toInt(),
-      lockTime: json['lock_time'] as String?,
+      lockTime: (json['lock_time'] as num?)?.toInt(),
       size: (json['size'] as num?)?.toInt(),
       relayedBy: json['relayed_by'] as String?,
       blockHeight: (json['block_height'] as num?)?.toInt(),
-      txIndex: json['tx_index'] as String?,
+      txIndex: (json['tx_index'] as num?)?.toInt(),
       inputs: (json['inputs'] as List<dynamic>?)
           ?.map((e) => Inputs.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -24,7 +25,7 @@ Transaction _$TransactionFromJson(Map<String, dynamic> json) => Transaction(
           .toList(),
     );
 
-Map<String, dynamic> _$TransactionToJson(Transaction instance) =>
+Map<String, dynamic> _$SingleTransactionToJson(SingleTransaction instance) =>
     <String, dynamic>{
       'hash': instance.hash,
       'ver': instance.ver,
@@ -53,9 +54,9 @@ Map<String, dynamic> _$InputsToJson(Inputs instance) => <String, dynamic>{
 
 PrevOut _$PrevOutFromJson(Map<String, dynamic> json) => PrevOut(
       hash: json['hash'] as String?,
-      value: json['value'] as String?,
-      txIndex: json['tx_index'] as String?,
-      n: json['n'] as String?,
+      value: (json['value'] as num?)?.toInt(),
+      txIndex: (json['tx_index'] as num?)?.toInt(),
+      n: (json['n'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$PrevOutToJson(PrevOut instance) => <String, dynamic>{
@@ -66,7 +67,7 @@ Map<String, dynamic> _$PrevOutToJson(PrevOut instance) => <String, dynamic>{
     };
 
 Out _$OutFromJson(Map<String, dynamic> json) => Out(
-      value: json['value'] as String?,
+      value: (json['value'] as num?)?.toInt(),
       hash: json['hash'] as String?,
       script: json['script'] as String?,
     );

@@ -9,7 +9,7 @@ import 'functions.dart';
 
 class Prefs {
   final SharedPreferences sharedPreferences;
-  static const mm = '💜💜💜💜💜Prefs 💜💜';
+  static const mm = '💜 Prefs 💜 💜';
 
   Prefs(this.sharedPreferences);
 

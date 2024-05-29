@@ -43,20 +43,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     DarkLightControl dlc = GetIt.instance<DarkLightControl>();
     Prefs prefs = GetIt.instance<Prefs>();
-
+    var ma = prefs.getModeAndColor();
     return StreamBuilder<ModeAndColor>(
         stream: dlc.darkLightStream,
         builder: (_, snapshot) {
-          Color mColor = Colors.red;
           ModeAndColor modeColor = prefs.getModeAndColor();
-          int? mode = mLIGHTMode;
+          Color mColor = getColors().elementAt(modeColor.colorIndex!);
+          int? mode;
           if (snapshot.hasData) {
             pp('$mm ... snapshot has data, mode: ${snapshot.data!.mode} - colorIndex: ${snapshot.data!.colorIndex}');
             modeColor = snapshot.data!;
             mColor = getColors().elementAt(modeColor.colorIndex!);
             mode = modeColor.mode;
           }
-          pp('$mm ...  mode: $mode - modeColor: ${modeColor.toJson()}');
+          pp('$mm ...  mode: ${modeColor.mode} - modeAndColor: ${modeColor.toJson()}');
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(

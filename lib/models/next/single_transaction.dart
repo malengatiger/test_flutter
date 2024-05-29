@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'transaction.g.dart';
+part 'single_transaction.g.dart';
 
 @JsonSerializable()
-class Transaction {
+class SingleTransaction {
   final String? hash;
   final int? ver;
   @JsonKey(name: 'vin_sz')
@@ -11,18 +11,18 @@ class Transaction {
   @JsonKey(name: 'vout_sz')
   final int? voutSz;
   @JsonKey(name: 'lock_time')
-  final String? lockTime;
+  final int? lockTime;
   final int? size;
   @JsonKey(name: 'relayed_by')
   final String? relayedBy;
   @JsonKey(name: 'block_height')
   final int? blockHeight;
   @JsonKey(name: 'tx_index')
-  final String? txIndex;
+  final int? txIndex;
   final List<Inputs>? inputs;
   final List<Out>? out;
 
-  const Transaction({
+  const SingleTransaction({
     this.hash,
     this.ver,
     this.vinSz,
@@ -36,10 +36,10 @@ class Transaction {
     this.out,
   });
 
-  factory Transaction.fromJson(Map<String, dynamic> json) =>
-      _$TransactionFromJson(json);
+  factory SingleTransaction.fromJson(Map<String, dynamic> json) =>
+      _$SingleTransactionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransactionToJson(this);
+  Map<String, dynamic> toJson() => _$SingleTransactionToJson(this);
 }
 
 @JsonSerializable()
@@ -62,10 +62,10 @@ class Inputs {
 @JsonSerializable()
 class PrevOut {
   final String? hash;
-  final String? value;
+  final int? value;
   @JsonKey(name: 'tx_index')
-  final String? txIndex;
-  final String? n;
+  final int? txIndex;
+  final int? n;
 
   const PrevOut({
     this.hash,
@@ -82,7 +82,7 @@ class PrevOut {
 
 @JsonSerializable()
 class Out {
-  final String? value;
+  final int? value;
   final String? hash;
   final String? script;
 

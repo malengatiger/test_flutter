@@ -10,8 +10,8 @@ class GithubViewer extends StatefulWidget {
 
 class GithubViewerState extends State<GithubViewer> {
 
-  static const frontEndUrl = '';
-  static const backEndUrl = '';
+  static const frontEndUrl = 'https://github.com/malengatiger/test_flutter';
+  static const backEndUrl = 'https://github.com/malengatiger/test_backend';
 
   bool _showFrontEndRepo = true;
   late WebViewController controller;

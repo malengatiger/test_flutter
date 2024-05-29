@@ -31,12 +31,11 @@ class Net {
      }
      return resp;
    }
-  static Future<http.Response> post({required String url, required data, required String token}) async {
-    pp('$mm post: ... Calling $url');
+  static Future<http.Response> post({required String url, required Map<String, dynamic> data, required String token}) async {
+    pp('$mm post: ... Calling $url - data: $data');
     late http.Response resp;
     try {
       resp = await http.post(Uri.parse(url), body: data);
-
     } catch (e) {
       pp('ERROR: $e');
       throw Exception('Network Error: $e');
