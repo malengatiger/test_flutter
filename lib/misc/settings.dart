@@ -16,26 +16,11 @@ class SettingsWidget extends StatefulWidget {
 }
 
 class SettingsWidgetState extends State<SettingsWidget> {
-  bool _darkMode = false;
-  int _selectedColorIndex = 0;
+  // int _selectedColorIndex = 0;
 
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.deepPurple,
-    Colors.indigo,
-    Colors.blue,
-    Colors.lightBlue,
-    Colors.cyan,
-    Colors.teal,
-    Colors.green,
-    Colors.lightGreen,
-    Colors.lime,
-  ];
 
   Prefs prefs = GetIt.instance<Prefs>();
-  DarkLightControl darkLightControl = GetIt.instance<DarkLightControl>();
+  ModeListener modeListener = GetIt.instance<ModeListener>();
 
   @override
   void initState() {
@@ -46,22 +31,15 @@ class SettingsWidgetState extends State<SettingsWidget> {
   late ModeAndColor _modeAndColor;
 
   Future<void> _loadSettings() async {
-    var mode = setState(() {
-      _modeAndColor = prefs.getModeAndColor();
-      if (_modeAndColor.colorIndex! > -1) {
-        _selectedColorIndex = _modeAndColor.colorIndex!;
-      }
-    });
+    _modeAndColor = prefs.getModeAndColor();
+    await Future.delayed(const Duration(milliseconds: 100));
     setState(() {});
   }
 
   Future<void> _saveModeAndColor() async {
     prefs.saveModeAndColor(_modeAndColor);
-    if (_darkMode) {
-      darkLightControl.setDarkMode(_selectedColorIndex);
-    } else {
-      darkLightControl.setLightMode(_selectedColorIndex);
-    }
+    modeListener.setMode(_modeAndColor);
+
     setState(() {});
   }
 
@@ -92,17 +70,17 @@ class SettingsWidgetState extends State<SettingsWidget> {
                 child: SettingsList(
                   sections: [
                     SettingsSection(
-                      title: const Text('General'),
+                      title: const Text('Mode and Color'),
                       tiles: [
                         SettingsTile.switchTile(
-                          title: Text(_darkMode ? 'Dark Mode' : 'Light Mode'),
+                          title: Text(_modeAndColor.mode == mDARKMode ? 'Dark Mode' : 'Light Mode'),
                           leading: const Icon(Icons.brightness_2),
                           onToggle: (value) {
-                            pp(' onToggle: mode setting: $value - _selectedColorIndex: $_selectedColorIndex');
-                            _darkMode = value;
+                            _modeAndColor.mode = value? mDARKMode : mLIGHTMode;
+                            pp(' onToggle: _modeAndColor setting: ${_modeAndColor.toJson()}');
                             _saveModeAndColor();
                           },
-                          initialValue: _darkMode,
+                          initialValue: _modeAndColor.mode == mDARKMode? true: false,
                         ),
                       ],
                     ),
@@ -113,7 +91,7 @@ class SettingsWidgetState extends State<SettingsWidget> {
                   height: 480,
                   child: ColorGallery(
                     onColorSelected: (index) {
-                      _selectedColorIndex = index;
+                      _modeAndColor.colorIndex = index;
                       _saveModeAndColor();
                     },
                   )),

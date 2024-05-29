@@ -41,29 +41,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DarkLightControl dlc = GetIt.instance<DarkLightControl>();
+    ModeListener dlc = GetIt.instance<ModeListener>();
     Prefs prefs = GetIt.instance<Prefs>();
-    var ma = prefs.getModeAndColor();
+    ModeAndColor modeColor = prefs.getModeAndColor();
+    Color mColor = getColors().elementAt(modeColor.colorIndex!);
+
     return StreamBuilder<ModeAndColor>(
         stream: dlc.darkLightStream,
         builder: (_, snapshot) {
-          ModeAndColor modeColor = prefs.getModeAndColor();
-          Color mColor = getColors().elementAt(modeColor.colorIndex!);
-          int? mode;
           if (snapshot.hasData) {
-            pp('$mm ... snapshot has data, mode: ${snapshot.data!.mode} - colorIndex: ${snapshot.data!.colorIndex}');
+            pp('$mm ... snapshot has data, mode: ${snapshot.data!.mode} '
+                '- colorIndex: ${snapshot.data!.colorIndex}');
             modeColor = snapshot.data!;
             mColor = getColors().elementAt(modeColor.colorIndex!);
-            mode = modeColor.mode;
           }
           pp('$mm ...  mode: ${modeColor.mode} - modeAndColor: ${modeColor.toJson()}');
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              fontFamily: GoogleFonts.openSans().fontFamily,
+              // fontFamily: GoogleFonts.openSans().fontFamily,
               pageTransitionsTheme: const PageTransitionsTheme(),
               colorScheme: ColorScheme.fromSeed(
-                  brightness: mode == 0 ? Brightness.dark : Brightness.light,
+                  brightness: modeColor.mode == mDARKMode
+                      ? Brightness.dark
+                      : Brightness.light,
                   seedColor: mColor),
               primaryColor: mColor,
             ),
@@ -76,7 +77,9 @@ class MyApp extends StatelessWidget {
 
 ThemeData themeDeepPurpleLight = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-    useMaterial3: true,
+    useMaterial3: true, fontFamily: GoogleFonts.openSans().fontFamily,
+    primaryColor: Colors.pink, primaryColorDark: Colors.pink.shade900,
+    primaryColorLight: Colors.pink.shade300,
     brightness: Brightness.light);
 
 ThemeData themeDeepPurpleDark = ThemeData(

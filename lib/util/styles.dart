@@ -81,18 +81,18 @@ TextStyle myTextStyleSmall(BuildContext context) {
 }
 
 TextStyle myTextStyleSmallBlackBold(BuildContext context) {
-  return GoogleFonts.roboto(
-      textStyle: Theme.of(context).textTheme.bodySmall,
-      // fontWeight: FontWeight.w200,
-      color: Theme.of(context).primaryColor);
+  return GoogleFonts.lato(
+      textStyle: Theme.of(context).textTheme.bodyMedium,
+      fontWeight: FontWeight.w700, fontSize: 16,
+      color: Colors.black);
 }
-
 TextStyle myTextStyleSmallBold(BuildContext context) {
   return GoogleFonts.lato(
-    textStyle: Theme.of(context).textTheme.bodySmall,
-    fontWeight: FontWeight.w600,
-  );
+      textStyle: Theme.of(context).textTheme.bodyMedium,
+      fontWeight: FontWeight.w700, fontSize: 16,);
 }
+
+
 
 TextStyle myTextStyleSmallBoldPrimaryColor(BuildContext context) {
   return GoogleFonts.lato(
@@ -211,7 +211,7 @@ TextStyle myTextStyleMediumBold(BuildContext context) {
   return GoogleFonts.lato(
     textStyle: Theme.of(context).textTheme.headlineMedium,
     fontWeight: FontWeight.w900,
-    fontSize: 16.0,
+    fontSize: 20.0,
   );
 }
 
@@ -263,7 +263,7 @@ TextStyle myTextStyleLarge(BuildContext context) {
   return GoogleFonts.roboto(
       textStyle: Theme.of(context).textTheme.headlineLarge,
       fontWeight: FontWeight.w900,
-      fontSize: 28);
+      fontSize: 24);
 }
 
 TextStyle myTextStyleLargeWithColor(BuildContext context, Color color) {

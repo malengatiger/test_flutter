@@ -4,10 +4,10 @@ part 'mode_and_color.g.dart';
 
 @JsonSerializable()
 class ModeAndColor {
-  final int? colorIndex;
-  final int? mode;
+   int? colorIndex;
+   int? mode;
 
-  const ModeAndColor({
+   ModeAndColor({
     this.colorIndex,
     this.mode,
   });

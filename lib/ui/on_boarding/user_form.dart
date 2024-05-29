@@ -36,17 +36,11 @@ class UserForm extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Image.asset(
-              //   'assets/busha_logo.jpeg',
-              //   scale: 4,
-              //   filterQuality: FilterQuality.low,
-              // ),
+
               const CircleAvatar(
                 radius: 48.0,
                 backgroundImage: AssetImage('assets/busha_logo.jpeg'),
-                // child: Image.asset(
-                //   'assets/busha_logo.jpeg',
-                // ),
+
               ),
               gapH16,
               Text(

@@ -13,7 +13,7 @@ class RegisterServices {
     pp('$mm registerServices: initialize service singletons with GetIt .... 🍎🍎🍎');
 
     var prefs = Prefs(await SharedPreferences.getInstance());
-    var dlc = DarkLightControl(prefs);
+    var modeListener = ModeListener();
 
     GetIt.instance.registerLazySingleton<AuthService>(
             () => AuthService(prefs));
@@ -24,11 +24,12 @@ class RegisterServices {
     GetIt.instance.registerLazySingleton<Prefs>(
             () => prefs);
 
-    GetIt.instance.registerLazySingleton<DarkLightControl>(
-            () => dlc);
+    GetIt.instance.registerLazySingleton<ModeListener>(
+            () => modeListener);
 
 
-    pp('$mm registerServices: service singletons set up: 🍎 [AuthService, BlockchainService]  🍎🍎');
+    pp('$mm registerServices: service singletons set up: '
+        '🍎 [AuthService, BlockchainService]  🍎🍎');
     Net.sayHello();
   }
 }

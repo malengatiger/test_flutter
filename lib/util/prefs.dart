@@ -36,16 +36,18 @@ class Prefs {
   void saveModeAndColor(ModeAndColor mode) {
     var json = jsonEncode(mode);
     sharedPreferences.setString('modeAndColor', json);
+    pp('$mm ModeAndColor cached, json string: $json');
 
   }
 
   ModeAndColor getModeAndColor() {
     var modeJson = sharedPreferences.getString('modeAndColor');
     if (modeJson == null) {
-      pp('$mm ... mode not found, returning 1 = light mode');
-      return const ModeAndColor(colorIndex: 0, mode: mLIGHTMode);
+      pp('$mm ... mode not found, returning 1 = mLIGHTMode');
+      return  ModeAndColor(colorIndex: 0, mode: mLIGHTMode);
     }
     var ma = ModeAndColor.fromJson(jsonDecode(modeJson));
+    pp('$mm ModeAndColor retrieved: ${ma.toJson()}');
     return ma;
   }
 
