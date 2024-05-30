@@ -172,8 +172,8 @@ class _BusyIndicatorState extends State<BusyIndicator> {
                     show
                         ? Expanded(
                             child: SizedBox(
-                              height: 100,
-                              width: 100,
+                              height: 160,
+                              width: 160,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: AnalogClock(

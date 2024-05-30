@@ -377,7 +377,7 @@ TextStyle myNumberStyleLargerPrimaryColor(BuildContext context) {
       textStyle: Theme.of(context).textTheme.titleLarge,
       color: Theme.of(context).primaryColor,
       fontWeight: FontWeight.w900,
-      fontSize: 28);
+      fontSize: 36);
 }
 
 TextStyle myNumberStyleLargerWithColor(

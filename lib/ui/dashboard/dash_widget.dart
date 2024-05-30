@@ -5,6 +5,9 @@ import 'package:busha_app/models/user.dart';
 import 'package:busha_app/services/blockchain.dart';
 import 'package:busha_app/ui/dashboard/crypto_card.dart';
 import 'package:busha_app/ui/dashboard/latest_block_widget.dart';
+import 'package:busha_app/ui/landing/info_page.dart';
+import 'package:busha_app/ui/news/article_viewer.dart';
+import 'package:busha_app/ui/news/news_widget.dart';
 import 'package:busha_app/ui/dashboard/top_movers_carousel.dart';
 import 'package:busha_app/ui/dashboard/transaction_list.dart';
 import 'package:busha_app/util/gaps.dart';
@@ -15,11 +18,13 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
-
+import 'package:intl/intl.dart';
+import 'package:badges/badges.dart' as bd;
 import '../../models/block.dart';
 import '../../util/functions.dart';
+import '../landing/landing_page.dart';
 
 class DashWidget extends StatefulWidget {
   const DashWidget({super.key});
@@ -39,17 +44,20 @@ class DashWidgetState extends State<DashWidget>
 
   static const mm = ' 🍎  🍎  🍎 Dashboard 🍎';
 
+  static const _bitcoinAssets = 129860;
+  static const _ethAssets = 28844;
+  static const _tezosAssets = 82599;
+  static const _totalAssets = _bitcoinAssets + _ethAssets + _tezosAssets;
+
   @override
   void initState() {
     _controller = AnimationController(vsync: this);
     super.initState();
     _getUser();
-    _getLatestBlock();
   }
 
   User? user;
   Block? block;
-  bool _busy = false;
 
   void _getUser() {
     user = prefs.getUser();
@@ -73,90 +81,32 @@ class DashWidgetState extends State<DashWidget>
         name: 'Doge',
         upArrow: true,
         percentage: 15.42));
+    carouselDataList.add(CarouselData(
+        imagePath: 'assets/logos/shibu.svg',
+        name: 'Shibu',
+        upArrow: true,
+        percentage: 13.5));
+    carouselDataList.add(CarouselData(
+        imagePath: 'assets/logos/litecoin.svg',
+        name: 'Litecoin',
+        upArrow: true,
+        percentage: 8.12));
+    carouselDataList.add(CarouselData(
+        imagePath: 'assets/logos/usdc.svg',
+        name: 'USDC',
+        upArrow: true,
+        percentage: 15.42));
     setState(() {});
   }
 
   void _navigateToLatestBlock() {
-    if (block != null) {
-      NavigationUtils.navigateToPage(
-          context: context,
-          widget: LatestBlockWidget(
-            block: block!,
-            onTransactionListRequired: (mHash) {
-              _navigateToTransactionList();
-            },
-          ));
-    }
+    NavigationUtils.navigateToPage(
+        context: context, widget: const LatestBlockWidget());
   }
 
   void _navigateToTransactionList() {
-    if (_blockTransactions != null) {
-      NavigationUtils.navigateToPage(
-          context: context,
-          widget: TransactionList(blockTransactions: _blockTransactions!, time: block!.data!.time!,));
-    } else {
-      _getBlockTransactions();
-    }
-  }
-
-  void _getLatestBlock() async {
-    pp('$mm .......... _getLatestBlock ......');
-
-    setState(() {
-      _busy = true;
-    });
-    try {
-      block = await blockchainService.getLatestBlock();
-      if (block != null) {
-        try {
-          pp('$mm latest block returned, will get transactions ..'
-              ' 🍎 hash: ${block!.data!.hash} 🍎');
-          await _getBlockTransactions();
-          _navigateToLatestBlock();
-        } catch (e, s) {
-          pp('$e $s');
-          if (mounted) {
-            showErrorDialog(message: '$e', context: context);
-          }
-        }
-      }
-    } catch (e, s) {
-      pp('$mm ERROR: $e $s');
-      if (mounted) {
-        showErrorDialog(message: '$e', context: context);
-      }
-    }
-
-    setState(() {
-      _busy = false;
-    });
-  }
-
-  BlockTransactions? _blockTransactions;
-
-  Future _getBlockTransactions() async {
-    pp('$mm .......... _getBlockTransactions ......');
-
-    setState(() {
-      _busy = true;
-    });
-    try {
-      if (block != null) {
-        pp('$mm _blockTransactions returned, 🍎 time: ${block!.data!.time} 🍎');
-        _blockTransactions =
-            await blockchainService.getBlockTransactions(block!.data!.hash!);
-        pp('$mm _blockTransactions returned, 🍎 mainChain: ${_blockTransactions!.mainChain!} 🍎');
-      }
-    } catch (e, s) {
-      pp('$mm ERROR: $e $s');
-      if (mounted) {
-        showErrorDialog(message: '$e', context: context);
-      }
-    }
-
-    setState(() {
-      _busy = false;
-    });
+    NavigationUtils.navigateToPage(
+        context: context, widget: const TransactionList());
   }
 
   List<CarouselData> carouselDataList = [];
@@ -171,15 +121,64 @@ class DashWidgetState extends State<DashWidget>
     NavigationUtils.navigateToPage(
         context: context, widget: const SettingsWidget());
   }
-
+  _navigateToLanding() {
+    NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
+  }
   @override
   Widget build(BuildContext context) {
+    var nf = NumberFormat('###,###,###,###');
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Busha Dashboard',
           style: myTextStyleMediumBoldPrimaryColor(context),
         ),
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(100), child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    user == null ? '' : user!.name!,
+                    style: myTextStyleSmallBoldPrimaryColor(context),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 20.0, top: 8, bottom: 8, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'My Assets',
+                    style: myTextStyleLarge(context),
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(nf.format(_totalAssets),
+                        style: myNumberStyleLargerPrimaryColor(context)),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )),
+        actions:  [
+          GestureDetector(
+            onTap: (){
+              _navigateToLanding();
+            },
+            child: const CircleAvatar(
+              radius: 18.0,
+              backgroundImage: AssetImage('assets/busha_logo.jpeg'),
+            ),
+          ),
+          gapW8,
+        ],
       ),
       body: SafeArea(
           child: Stack(
@@ -187,76 +186,65 @@ class DashWidgetState extends State<DashWidget>
           SingleChildScrollView(
             child: Column(
               children: [
+
+
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CryptoCard(
+                      name: 'Bitcoin',
+                      ticker: 'BTC',
+                      imagePath: 'assets/logos/bitcoin.svg',
+                      upArrow: true,
+                      amount: _bitcoinAssets,
+                      percentage: 18.92),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CryptoCard(
+                      name: 'Ethereum',
+                      ticker: 'ETH',
+                      imagePath: 'assets/logos/ethereum.svg',
+                      upArrow: true,
+                      amount: _ethAssets,
+                      percentage: 6.48),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CryptoCard(
+                      name: 'Tezos',
+                      ticker: 'TZX',
+                      imagePath: 'assets/logos/tezos.svg',
+                      upArrow: false,
+                      amount: _tezosAssets,
+                      percentage: -4.91),
+                ),
+                gapH32,
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(
+                      left: 16.0, top: 8, bottom: 8, right: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const CircleAvatar(
-                        radius: 20.0,
-                        backgroundImage: AssetImage('assets/busha_logo.jpeg'),
-                      ),
-                      Text(
-                        user == null ? '' : user!.name!,
-                        style: myTextStyleMediumBoldPrimaryColor(context),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'My Assets',
-                        style: myTextStyleLarge(context),
-                      ),
-                      TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'See all',
-                            style: myTextStyleMediumBoldPrimaryColor(context),
-                          )),
-                    ],
-                  ),
-                ),
-                const CryptoCard(
-                    name: 'Bitcoin',
-                    ticker: 'BTC',
-                    imagePath: 'assets/logos/bitcoin.svg',
-                    upArrow: true,
-                    amount: 98540,
-                    percentage: 15.92),
-                const CryptoCard(
-                    name: 'Ethereum',
-                    ticker: 'ETH',
-                    imagePath: 'assets/logos/ethereum.svg',
-                    upArrow: true,
-                    amount: 5890,
-                    percentage: 6.48),
-                const CryptoCard(
-                    name: 'Tezos',
-                    ticker: 'TZX',
-                    imagePath: 'assets/logos/tezos.svg',
-                    upArrow: false,
-                    amount: 6752,
-                    percentage: -4.91),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      gapW16,
                       Text(
                         'Today\'s Top Movers',
-                        style: myTextStyleMediumBold(context),
+                        style: myTextStyleLarge(context),
+                      ),
+                      bd.Badge(
+                        badgeContent: Text('${carouselDataList.length}',
+                        style: const TextStyle(color: Colors.white),),
+                        badgeStyle: bd.BadgeStyle(
+                          badgeColor: Colors.green.shade800,
+                          padding: const EdgeInsets.all(12),
+                        ),
                       ),
                     ],
                   ),
                 ),
+                gapH32,
                 TopMoversCarousel(
                     carouselData: carouselDataList,
                     carouselController: carouselController),
+                gapH32,
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -264,17 +252,30 @@ class DashWidgetState extends State<DashWidget>
                       gapW16,
                       Text(
                         'Trending News',
-                        style: myTextStyleMediumBold(context),
+                        style: myTextStyleLarge(context),
                       ),
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16.0, right: 16, top: 8, bottom: 8),
+                  child: Card(
+                      elevation: 8,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: NewsWidget(
+                          onArticleRequested: (url) {
+                            NavigationUtils.navigateToPage(
+                                context: context,
+                                widget: ArticleViewer(url: url));
+                          },
+                        ),
+                      )),
+                ),
               ],
             ),
           ),
-          _busy
-              ? const Positioned(child: Center(child: BusyIndicator()))
-              : gapH32,
         ],
       )),
       bottomNavigationBar: BottomNavigationBar(
@@ -286,7 +287,7 @@ class DashWidgetState extends State<DashWidget>
               backgroundColor: Theme.of(context).primaryColorLight),
           BottomNavigationBarItem(
               icon: const Icon(Icons.refresh),
-              label: 'Refresh',
+              label: 'Latest Block',
               tooltip: 'Get Latest Block',
               backgroundColor: Theme.of(context).primaryColorLight),
           BottomNavigationBarItem(
@@ -306,7 +307,7 @@ class DashWidgetState extends State<DashWidget>
               _navigateToSettings();
               break;
             case 1:
-              _getLatestBlock();
+              _navigateToLatestBlock();
               break;
             case 2:
               _navigateToTransactionList();

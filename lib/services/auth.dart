@@ -11,7 +11,7 @@ import '../models/user.dart';
 import 'net.dart';
 
 class AuthService {
-  static const localUrl = 'http://192.168.86.230:3000/';
+  static const localUrl = 'http://192.168.86.230:8080/';
   static const remoteUrl = 'TBD';
   final Prefs prefs;
   static const mm = '🔑 🔑 AuthService 🔑';
@@ -32,6 +32,10 @@ class AuthService {
 
     await prefs.saveUser(mUser);
     return mUser;
+  }
+
+  static Future signOut() async {
+    await m_auth.FirebaseAuth.instance.signOut();
   }
 
   Future<Response> register(User user) async {

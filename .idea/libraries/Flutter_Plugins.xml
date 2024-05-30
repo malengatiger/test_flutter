@@ -23,6 +23,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/webview_flutter_android-3.16.4" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.17.5" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth-4.20.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/sqflite-2.3.3+1" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

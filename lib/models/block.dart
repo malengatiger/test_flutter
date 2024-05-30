@@ -24,16 +24,36 @@ class Data {
   final int? time;
   @JsonKey(name: 'block_index')
   final int? blockIndex;
-  final int? height;
+  //received_time
+  @JsonKey(name: 'received_time')
+  final int? receivedTime;
+  final int? height, size;
+  //main_chain
+  @JsonKey(name: 'main_chain')
+  final int? mainChain;
+  //relayed_by
+  @JsonKey(name: 'relayed_by')
+  final String? relayedBy;
+  //n_tx prev_block
+  @JsonKey(name: 'n_tx')
+  final int? numberOfTransactions;
+  @JsonKey(name: 'prev_block')
+  final String? prevBlock;
   final List<int>? txIndexes;
 
-  const Data({
-    this.hash,
-    this.time,
-    this.blockIndex,
-    this.height,
-    this.txIndexes,
-  });
+
+  Data({
+      this.hash,
+      this.time,
+      this.blockIndex,
+      this.receivedTime,
+      this.height,
+      this.size,
+      this.mainChain,
+      this.relayedBy,
+      this.numberOfTransactions,
+      this.prevBlock,
+      this.txIndexes});
 
   factory Data.fromJson(Map<String, dynamic> json) =>
       _$DataFromJson(json);

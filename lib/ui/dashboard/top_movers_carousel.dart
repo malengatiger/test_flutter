@@ -1,7 +1,6 @@
 import 'package:busha_app/ui/dashboard/top_movers_item.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class TopMoversCarousel extends StatelessWidget {
@@ -14,20 +13,14 @@ class TopMoversCarousel extends StatelessWidget {
     var options = CarouselOptions();
 
     return SizedBox(
-      height: 300,
+      height: 200,
       child: ListView.builder(
           itemCount: carouselData.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (_,index){
         var cd = carouselData.elementAt(index);
-        return TopMoverItem(carouselData: cd);
+        return TopMoverItem(carouselData: cd, fontSize: 20, index: index + 1,);
       }),
-    );
-    return CarouselSlider.builder(
-      itemCount: carouselData.length, carouselController: carouselController,
-      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
-          TopMoverItem(carouselData: carouselData.elementAt(itemIndex)),
-      options: options,
     );
   }
 }

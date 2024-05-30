@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
               primaryColor: mColor,
             ),
             title: "Busha Demo",
-            home: const LandingPage(),
+            home: const LandingPage(stickAround: false,),
           );
         });
   }

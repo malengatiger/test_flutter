@@ -2,6 +2,7 @@ import 'package:busha_app/misc/settings.dart';
 import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/ui/dashboard/dash_widget.dart';
 import 'package:busha_app/ui/github/github_viewer.dart';
+import 'package:busha_app/ui/landing/landing_page.dart';
 import 'package:busha_app/ui/on_boarding/user_registration.dart';
 import 'package:busha_app/ui/on_boarding/user_sign_in.dart';
 import 'package:busha_app/util/functions.dart';
@@ -13,19 +14,17 @@ import 'package:get_it/get_it.dart';
 import '../../models/user.dart';
 import '../../util/gaps.dart';
 
-class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.stickAround});
-
-  final bool stickAround;
+class InfoPage extends StatefulWidget {
+  const InfoPage({super.key,});
 
   @override
-  LandingPageState createState() => LandingPageState();
+  InfoPageState createState() => InfoPageState();
 }
 
-class LandingPageState extends State<LandingPage>
+class InfoPageState extends State<InfoPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  static const mm = '🌍 🌍 LandingPage 🍎';
+  static const mm = '🌍 🌍 InfoPage 🍎';
   AuthService authService = GetIt.instance<AuthService>();
   Prefs prefs = GetIt.instance<Prefs>();
 
@@ -35,54 +34,13 @@ class LandingPageState extends State<LandingPage>
     super.initState();
     _checkStatus();
   }
-
   _checkStatus() async {
     pp('$mm ... checking Firebase Auth status ...');
     user = prefs.getUser();
-    await Future.delayed(const Duration(milliseconds: 100));
-    if (await AuthService.isSignedIn() && widget.stickAround == false) {
-      _navigateToDashboard();
-      return;
-    }
-    pp('$mm ... User is NOT signed in ... expecting choice of Registration or SignIn');
     setState(() {});
   }
 
   User? user;
-
-  _navigateToRegistration() {
-    pp('$mm _navigateToRegistration');
-    NavigationUtils.navigateToPage(
-        context: context,
-        widget: UserRegistrationWidget(onUserRegistered: (u) async {
-          pp('$mm user is registered real kool: ${u.toJson()}');
-          user = u;
-          if (mounted) {
-            setState(() {});
-          }
-          await Future.delayed(const Duration(milliseconds: 2000));
-          if (mounted) {
-            Navigator.of(context).pop();
-            _navigateToDashboard();
-          }
-        }));
-  }
-
-  _navigateToSignIn() {
-    pp('$mm _navigateToSignIn');
-    NavigationUtils.navigateToPage(
-        context: context,
-        widget: UserSignInWidget(onUserSignedIn: (u) {
-          pp('$mm user is signed in ok: ${u.toJson()}');
-        }));
-  }
-
-  _navigateToDashboard() {
-    pp('$mm _navigateToDashboard');
-    NavigationUtils.navigateToPage(
-        context: context, widget: const DashWidget());
-  }
-
   _navigateToGitHub() {
     NavigationUtils.navigateToPage(
         context: context, widget: const GithubViewer());
@@ -97,19 +55,19 @@ class LandingPageState extends State<LandingPage>
   _close() {
     Navigator.of(context).pop();
   }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-  Widget _leading() {
-    Text text = Text('Pause');
-
-    return text;
+  _logOut() async {
+    await AuthService.signOut();
+    if (mounted) {
+      Navigator.of(context).pop();
+      NavigationUtils.navigateToPage(context: context, widget: const LandingPage(stickAround: false));
+    }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,31 +98,19 @@ class LandingPageState extends State<LandingPage>
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
                   gapH16,
-                  widget.stickAround
-                      ? gapH16
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  _navigateToSignIn();
-                                },
-                                child: const Text('Sign In')),
-                            TextButton(
-                                onPressed: () {
-                                  _navigateToRegistration();
-                                },
-                                child: const Text('Register')),
-                          ],
-                        ),
                   gapH16,
-                  AnimatedContainer(
-                      duration: const Duration(milliseconds: 2000),
-                      curve: Curves.bounceIn,
-                      child: Image.asset(
-                        'assets/banner1.webp',
-                        fit: BoxFit.fill,
-                      )),
+                  GestureDetector(
+                    onDoubleTap: () async {
+                       _logOut();
+                    },
+                    child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 2000),
+                        curve: Curves.bounceIn,
+                        child: Image.asset(
+                          'assets/banner1.webp',
+                          fit: BoxFit.fill,
+                        )),
+                  ),
                   gapH16,
                   const Padding(
                     padding: EdgeInsets.all(16.0),
@@ -178,12 +124,10 @@ class LandingPageState extends State<LandingPage>
                       },
                       child: const Text('View the code on GitHub')),
                   gapH32,
-                  ElevatedButton(
-                      onPressed: () async {
-                        _checkStatus();
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Close')),
+                  ElevatedButton(onPressed: () async {
+                    _close();
+                    Navigator.of(context).pop();
+                  }, child: const Text('Close')),
                 ],
               )
             ],

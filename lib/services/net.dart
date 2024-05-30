@@ -6,7 +6,7 @@ class Net {
   static const _ipFibreDown  = '192.168.86.242';
   static const  _ipNormal = '192.168.86.230';
   static const bool isFibreOK = true;
-  static const _devSkunkUrl = 'http://${isFibreOK? _ipNormal: _ipFibreDown}:3000/';
+  static const _devSkunkUrl = 'http://${isFibreOK? _ipNormal: _ipFibreDown}:8080/';
   static const _prodSkunkUrl = 'https://skunkworks-backend-service-knzs6eczwq-nw.a.run.app/';
   static String getSkunkUrl() {
     if (kDebugMode) {

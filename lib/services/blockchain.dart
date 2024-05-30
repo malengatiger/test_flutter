@@ -23,7 +23,7 @@ class BlockchainService {
       var resp = await Net.get('blockchain/getLatestBlock');
       if (resp.statusCode == 200 || resp.statusCode == 201) {
         block = Block.fromJson(jsonDecode(resp.body));
-        pp('$mm getLatestBlock ...  🍐 \n block blockIndex: 🍐 ${resp.body}  🍐');
+        pp('$mm getLatestBlock ...  🍐 \n block time: 🍐 ${block.data!.time}  🍐');
       }
     } catch (e, s) {
       pp(e);
@@ -38,7 +38,7 @@ class BlockchainService {
     BlockTransactions? blockTransactions;
     try {
       var resp = await Net.get('blockchain/getBlockTransactions?hash=$hash');
-      pp('$mm ... getBlockTransactions response: status: ${resp.statusCode} - ${resp.body}');
+      pp('$mm ... getBlockTransactions response: status: ${resp.statusCode} ');
       // pp('$mm ... getBlockTransactions response: body: ${resp.body}');
       var hJson = jsonDecode(resp.body);
       var xJson = hJson['data'];
