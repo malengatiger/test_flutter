@@ -1,6 +1,4 @@
-import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/misc/settings.dart';
-import 'package:busha_app/models/next/block_transactions.dart';
 import 'package:busha_app/models/user.dart';
 import 'package:busha_app/services/blockchain.dart';
 import 'package:busha_app/ui/dashboard/crypto_card.dart';
@@ -10,8 +8,10 @@ import 'package:busha_app/ui/news/article_viewer.dart';
 import 'package:busha_app/ui/news/news_widget.dart';
 import 'package:busha_app/ui/dashboard/top_movers_carousel.dart';
 import 'package:busha_app/ui/dashboard/transaction_list.dart';
+import 'package:busha_app/ui/tezos/tezos_blocks.dart';
 import 'package:busha_app/util/gaps.dart';
 import 'package:busha_app/util/navigation_util.dart';
+import 'package:busha_app/util/news_refresh_listener.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:busha_app/util/styles.dart';
 import 'package:carousel_slider/carousel_controller.dart';
@@ -24,7 +24,6 @@ import 'package:intl/intl.dart';
 import 'package:badges/badges.dart' as bd;
 import '../../models/block.dart';
 import '../../util/functions.dart';
-import '../landing/landing_page.dart';
 
 class DashWidget extends StatefulWidget {
   const DashWidget({super.key});
@@ -38,6 +37,8 @@ class DashWidgetState extends State<DashWidget>
   late AnimationController _controller;
 
   final Prefs prefs = GetIt.instance<Prefs>();
+  final NewsRefreshListener newsRefreshListener = GetIt.instance<NewsRefreshListener>();
+
   final BlockchainService blockchainService =
       GetIt.instance<BlockchainService>();
   final CarouselController carouselController = CarouselController();
@@ -121,6 +122,10 @@ class DashWidgetState extends State<DashWidget>
     NavigationUtils.navigateToPage(
         context: context, widget: const SettingsWidget());
   }
+  _navigateToTezosBlock() {
+    NavigationUtils.navigateToPage(
+        context: context, widget: const TezosBlockWidget());
+  }
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
@@ -168,6 +173,9 @@ class DashWidgetState extends State<DashWidget>
           ],
         )),
         actions:  [
+          IconButton(onPressed: (){
+            _navigateToSettings();
+          }, icon: const Icon(Icons.settings)),
           GestureDetector(
             onTap: (){
               _navigateToLanding();
@@ -212,7 +220,7 @@ class DashWidgetState extends State<DashWidget>
                   padding: EdgeInsets.all(8.0),
                   child: CryptoCard(
                       name: 'Tezos',
-                      ticker: 'TZX',
+                      ticker: 'XTZ',
                       imagePath: 'assets/logos/tezos.svg',
                       upArrow: false,
                       amount: _tezosAssets,
@@ -247,14 +255,21 @@ class DashWidgetState extends State<DashWidget>
                 gapH32,
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      gapW16,
-                      Text(
-                        'Trending News',
-                        style: myTextStyleLarge(context),
-                      ),
-                    ],
+                  child: GestureDetector(
+                    onTap: (){
+                      pp('$mm I really want to refresh the news');
+                      newsRefreshListener.setRefresh();
+                    },
+                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // gapW16,
+                        Text(
+                          'Trending News',
+                          style: myTextStyleLarge(context),
+                        ),
+                        Text('Tap to refresh the news', style: myTextStyleTinyGrey(context),),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -281,12 +296,12 @@ class DashWidgetState extends State<DashWidget>
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: const Icon(Icons.settings),
-              label: 'Settings',
-              tooltip: 'Change Mode and Color',
+              icon: const Icon(Icons.ac_unit, color: Colors.amber,),
+              label: 'Tezos Block',
+              tooltip: 'Get Tezos Block',
               backgroundColor: Theme.of(context).primaryColorLight),
           BottomNavigationBarItem(
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(Icons.cloud_download, color: Colors.green,),
               label: 'Latest Block',
               tooltip: 'Get Latest Block',
               backgroundColor: Theme.of(context).primaryColorLight),
@@ -299,12 +314,12 @@ class DashWidgetState extends State<DashWidget>
               tooltip: 'Get Block Transactions',
               backgroundColor: Theme.of(context).primaryColorLight),
         ],
-        elevation: 16,
+        elevation: 8,
         onTap: (index) {
           pp('$mm ... BottomNavigationBarItem index : $index');
           switch (index) {
             case 0:
-              _navigateToSettings();
+              _navigateToTezosBlock();
               break;
             case 1:
               _navigateToLatestBlock();

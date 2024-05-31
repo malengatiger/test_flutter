@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/models/news/news.dart';
 import 'package:busha_app/services/news_service.dart';
+import 'package:busha_app/util/news_refresh_listener.dart';
 import 'package:busha_app/util/styles.dart';
 import 'package:busha_app/util/toasts.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +23,32 @@ class NewsWidget extends StatefulWidget {
 
 class NewsWidgetState extends State<NewsWidget> {
   NewsService newsService = GetIt.instance<NewsService>();
+  NewsRefreshListener newsRefreshListener =
+      GetIt.instance<NewsRefreshListener>();
+
+  late StreamSubscription<bool> newsSub;
   bool _busy = false;
 
   @override
   void initState() {
     super.initState();
+    _listen();
     _getNews();
+  }
+
+  void _listen() {
+    newsSub = newsRefreshListener.refreshStream.listen((onData) {
+      pp('... listener fired, should refresh the news: $onData');
+      if (mounted) {
+        _getNews();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    newsSub.cancel();
+    super.dispose();
   }
 
   News? news;
@@ -51,37 +75,49 @@ class NewsWidgetState extends State<NewsWidget> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 600,
-      child: bd.Badge(
-        badgeContent: news == null
-            ? const Text('0')
-            : Text(
-                '${news!.results!.length}',
-                style: const TextStyle(color: Colors.white),
-              ),
-        badgeStyle: const bd.BadgeStyle(
-            padding: EdgeInsets.all(12), badgeColor: Colors.blue),
-        child: ListView.builder(
-            itemCount: news == null? 0 : news!.results!.length,
-            itemBuilder: (_, index) {
-              var result = news!.results!.elementAt(index);
-              return GestureDetector(
-                onTap: () {
-                  if (result.link != null) {
-                    widget.onArticleRequested(result.link!);
-                  } else {
-                    showToast(
-                        message: 'This news item has no link',
-                        context: context,
-                        duration: const Duration(milliseconds: 2000));
-                  }
-                },
-                child: Card(
-                  child: NewsItem(
-                    result: result,
-                  ),
+      child: GestureDetector(
+        onTap: (){
+          pp('... newsRefreshListener.setRefresh ... ');
+          newsRefreshListener.setRefresh();
+        },
+        child: bd.Badge(
+          badgeContent: news == null
+              ?const Text('0')
+              : Text(
+                  '${news!.results!.length}',
+                  style: const TextStyle(color: Colors.white),
                 ),
-              );
-            }),
+          badgeStyle: const bd.BadgeStyle(
+              padding: EdgeInsets.all(12), badgeColor: Colors.blue),
+          child: _busy
+              ? const Center(
+                  child: BusyIndicator(
+                    caption: 'Refreshing the news ...',
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: news == null ? 0 : news!.results!.length,
+                  itemBuilder: (_, index) {
+                    var result = news!.results!.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        if (result.link != null) {
+                          widget.onArticleRequested(result.link!);
+                        } else {
+                          showToast(
+                              message: 'This news item has no link',
+                              context: context,
+                              duration: const Duration(milliseconds: 2000));
+                        }
+                      },
+                      child: Card(
+                        child: NewsItem(
+                          result: result,
+                        ),
+                      ),
+                    );
+                  }),
+        ),
       ),
     );
   }
@@ -94,7 +130,7 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // pp(' 💜 imageUrl: ${result.imageUrl} \n 💜link: ${result.link} \n 💜 title:  ${result.title}');
+    pp(' 💜 imageUrl: ${result.imageUrl} \n 💜link: ${result.link} \n 💜 title:  ${result.title}');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(

@@ -7,6 +7,7 @@ import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/gaps.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/styles.dart';
+import 'package:busha_app/util/toasts.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -41,9 +42,11 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
           block: block,
         ));
   }
+
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
+
   void _getLatestBlock() async {
     pp('$mm .......... _getLatestBlock ......');
 
@@ -128,7 +131,7 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
               },
               icon: const Icon(Icons.refresh)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               _navigateToLanding();
             },
             child: const CircleAvatar(
@@ -273,7 +276,15 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                                   ),
                                   gapH32,
                                   gapH32,
-                                  const ViewOnBlockchain(),
+                                  GestureDetector(
+                                      onTap: () {
+                                        pp('... newsRefreshListener.setRefresh ... ');
+                                        showToast(
+                                            message:
+                                                'Under Construction, check us out later!',
+                                            context: context);
+                                      },
+                                      child: const ViewOnBlockchain()),
                                 ],
                               ),
                             ),

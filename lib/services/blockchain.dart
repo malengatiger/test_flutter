@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:busha_app/models/block.dart';
+import 'package:busha_app/models/tezos/account.dart';
+import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/functions.dart';
@@ -32,6 +34,40 @@ class BlockchainService {
     return block;
   }
 
+  Future<List<Account>> getTezosAccounts() async {
+    List<Account> accounts = [];
+
+    try {
+      var resp = await Net.get('tezos/getAccounts');
+      if (resp.statusCode == 200) {
+            List mList = jsonDecode(resp.body);
+            for (var json in mList) {
+              var acc = Account.fromJson(json);
+              accounts.add(acc);
+            }
+          }
+    } catch (e,s) {
+      pp('$e $s');
+    }
+
+    return accounts;
+  }
+  Future<TezosBlock?> getTezosBlock(String timestamp) async {
+     TezosBlock? block;
+
+    try {
+      var resp = await Net.get('tezos/getBlock?timestamp=$timestamp');
+      if (resp.statusCode == 200) {
+        var mJson = jsonDecode(resp.body);
+        block = TezosBlock.fromJson(mJson);
+      }
+    } catch (e,s) {
+      pp('$e $s');
+      throw Exception('Failed to get Tezos block: $e');
+    }
+
+    return block;
+  }
   Future<BlockTransactions?> getBlockTransactions(String hash) async {
     pp('\n\n$mm ........................ getBlockTransactions, hash: $hash ...');
 
@@ -67,4 +103,9 @@ class BlockchainService {
   }
 
   Future getZetosBlocks() async {}
+
+  Future getZetosAccounts() async {
+
+    var resp = await Net.get('path');
+  }
 }

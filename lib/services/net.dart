@@ -7,10 +7,10 @@ class Net {
   static const  _ipNormal = '192.168.86.230';
   static const bool isFibreOK = true;
   static const _devSkunkUrl = 'http://${isFibreOK? _ipNormal: _ipFibreDown}:8080/';
-  static const _prodSkunkUrl = 'https://skunkworks-backend-service-knzs6eczwq-nw.a.run.app/';
+  static const _prodSkunkUrl = 'https://busha-nest-1-ajtawuiiiq-ew.a.run.app/';
   static String getSkunkUrl() {
     if (kDebugMode) {
-      return _devSkunkUrl;
+      return _devSkunkUrl; //TODO - change back to local after test
     } else {
       return _prodSkunkUrl;
     }
@@ -31,11 +31,12 @@ class Net {
      }
      return resp;
    }
-  static Future<http.Response> post({required String url, required Map<String, dynamic> data, required String token}) async {
-    pp('$mm post: ... Calling $url - data: $data');
+  static Future<http.Response> post({required String path, required Map<String, dynamic> data, required String token}) async {
+    pp('$mm post: ... Calling $path - data: $data');
+    var mUrl = '${getSkunkUrl()}$path';
     late http.Response resp;
     try {
-      resp = await http.post(Uri.parse(url), body: data);
+      resp = await http.post(Uri.parse(path), body: data);
     } catch (e) {
       pp('ERROR: $e');
       throw Exception('Network Error: $e');
@@ -46,7 +47,7 @@ class Net {
   static Future sayHello() async {
     String path = '';
     var resp = await get(path);
-    pp('$mm sayHello response, status: ${resp.statusCode}  🍎 body: ${resp.body}');
+    pp('$mm sayHello response, status: ${resp.statusCode}  🍎 body: ${resp.body} 🍎');
   }
   static const mm = '🅿️ Net';
 }

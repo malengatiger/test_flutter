@@ -62,7 +62,6 @@ class LandingPageState extends State<LandingPage>
           }
           await Future.delayed(const Duration(milliseconds: 2000));
           if (mounted) {
-            Navigator.of(context).pop();
             _navigateToDashboard();
           }
         }));
@@ -74,40 +73,39 @@ class LandingPageState extends State<LandingPage>
         context: context,
         widget: UserSignInWidget(onUserSignedIn: (u) {
           pp('$mm user is signed in ok: ${u.toJson()}');
+          _navigateToDashboard();
         }));
   }
 
   _navigateToDashboard() {
     pp('$mm _navigateToDashboard');
+    Navigator.of(context).pop();
     NavigationUtils.navigateToPage(
         context: context, widget: const DashWidget());
   }
 
-  _navigateToGitHub() {
+  _navigateToGitFrontEnd() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const GithubViewer());
+        context: context, widget: const GithubViewer(gitHubIndex: 0,));
   }
-
+  _navigateToGitBackEnd() {
+    NavigationUtils.navigateToPage(
+        context: context, widget: const GithubViewer(gitHubIndex: 1,));
+  }
+  _navigateToGitProfile() {
+    NavigationUtils.navigateToPage(
+        context: context, widget: const GithubViewer(gitHubIndex: 3,));
+  }
   _navigateToSettings() {
     pp('$mm _navigateToSettings');
     NavigationUtils.navigateToPage(
         context: context, widget: const SettingsWidget());
   }
 
-  _close() {
-    Navigator.of(context).pop();
-  }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
-  }
-
-  Widget _leading() {
-    Text text = Text('Pause');
-
-    return text;
   }
 
   @override
@@ -139,7 +137,7 @@ class LandingPageState extends State<LandingPage>
                     user == null ? '' : '${user?.name}',
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  gapH16,
+                  gapH8,
                   widget.stickAround
                       ? gapH16
                       : Row(
@@ -157,7 +155,7 @@ class LandingPageState extends State<LandingPage>
                                 child: const Text('Register')),
                           ],
                         ),
-                  gapH16,
+                  gapH8,
                   AnimatedContainer(
                       duration: const Duration(milliseconds: 2000),
                       curve: Curves.bounceIn,
@@ -165,19 +163,31 @@ class LandingPageState extends State<LandingPage>
                         'assets/banner1.webp',
                         fit: BoxFit.fill,
                       )),
-                  gapH16,
+                  gapH8,
                   const Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
                         'Welcome to the Busha Mobile Dev Assessment app built with Flutter with support from backend BushaBackend, built with NodeJS, NestJS and Firebase'),
                   ),
-                  gapH32,
+                  gapH16,
                   TextButton(
                       onPressed: () {
-                        _navigateToGitHub();
+                        _navigateToGitFrontEnd();
                       },
-                      child: const Text('View the code on GitHub')),
-                  gapH32,
+                      child: const Text('View the Flutter code on GitHub')),
+                  gapH16,
+                  TextButton(
+                      onPressed: () {
+                        _navigateToGitBackEnd();
+                      },
+                      child: const Text('View the NodeJS code on GitHub')),
+                  gapH16,
+                  TextButton(
+                      onPressed: () {
+                        _navigateToGitProfile();
+                      },
+                      child: const Text('View personal profile GitHub')),
+                  gapH16,
                   ElevatedButton(
                       onPressed: () async {
                         _checkStatus();

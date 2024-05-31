@@ -5,6 +5,8 @@ import 'package:busha_app/models/mode_and_color.dart';
 import 'package:busha_app/services/register_services.dart';
 import 'package:busha_app/ui/landing/landing_page.dart';
 import 'package:busha_app/ui/on_boarding/color_gallery.dart';
+import 'package:busha_app/ui/tezos/tezos_accounts.dart';
+import 'package:busha_app/ui/tezos/tezos_blocks.dart';
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,6 +71,8 @@ class MyApp extends StatelessWidget {
               primaryColor: mColor,
             ),
             title: "Busha Demo",
+            // home: const TezosBlockWidget(),
+            // home: const TezosAccounts(),
             home: const LandingPage(stickAround: false,),
           );
         });

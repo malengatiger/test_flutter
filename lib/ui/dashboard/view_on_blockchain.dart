@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../util/gaps.dart';
 
 class ViewOnBlockchain extends StatelessWidget {
-  const ViewOnBlockchain({Key? key}) : super(key: key);
+  const ViewOnBlockchain({super.key});
 
   @override
   Widget build(BuildContext context) {

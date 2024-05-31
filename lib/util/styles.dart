@@ -115,6 +115,14 @@ TextStyle myTextStyleTiny(BuildContext context) {
     fontSize: 10,
   );
 }
+TextStyle myTextStyleTinyGrey(BuildContext context) {
+  return GoogleFonts.lato(
+    textStyle: Theme.of(context).textTheme.bodySmall,
+    fontWeight: FontWeight.normal,
+    color: Colors.grey.shade700,
+    fontSize: 10,
+  );
+}
 
 TextStyle myTextStyleTiniest(BuildContext context) {
   return GoogleFonts.lato(
@@ -203,7 +211,7 @@ TextStyle myTextStyleMediumBoldPrimaryColor(BuildContext context) {
   return GoogleFonts.lato(
       textStyle: Theme.of(context).textTheme.bodyMedium,
       fontWeight: FontWeight.w900,
-      fontSize: 20,
+      // fontSize: 20,
       color: Theme.of(context).primaryColor);
 }
 
@@ -263,7 +271,7 @@ TextStyle myTextStyleLarge(BuildContext context) {
   return GoogleFonts.roboto(
       textStyle: Theme.of(context).textTheme.headlineLarge,
       fontWeight: FontWeight.w900,
-      fontSize: 24);
+      fontSize: 20);
 }
 
 TextStyle myTextStyleLargeWithColor(BuildContext context, Color color) {

@@ -8,6 +8,7 @@ import 'package:busha_app/ui/on_boarding/user_sign_in.dart';
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/prefs.dart';
+import 'package:busha_app/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -15,7 +16,9 @@ import '../../models/user.dart';
 import '../../util/gaps.dart';
 
 class InfoPage extends StatefulWidget {
-  const InfoPage({super.key,});
+  const InfoPage({
+    super.key,
+  });
 
   @override
   InfoPageState createState() => InfoPageState();
@@ -34,6 +37,7 @@ class InfoPageState extends State<InfoPage>
     super.initState();
     _checkStatus();
   }
+
   _checkStatus() async {
     pp('$mm ... checking Firebase Auth status ...');
     user = prefs.getUser();
@@ -41,9 +45,29 @@ class InfoPageState extends State<InfoPage>
   }
 
   User? user;
-  _navigateToGitHub() {
+
+  _navigateToGitFrontEnd() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const GithubViewer());
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 0,
+        ));
+  }
+
+  _navigateToGitBackEnd() {
+    NavigationUtils.navigateToPage(
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 1,
+        ));
+  }
+
+  _navigateToGitProfile() {
+    NavigationUtils.navigateToPage(
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 2,
+        ));
   }
 
   _navigateToSettings() {
@@ -55,6 +79,7 @@ class InfoPageState extends State<InfoPage>
   _close() {
     Navigator.of(context).pop();
   }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -65,9 +90,11 @@ class InfoPageState extends State<InfoPage>
     await AuthService.signOut();
     if (mounted) {
       Navigator.of(context).pop();
-      NavigationUtils.navigateToPage(context: context, widget: const LandingPage(stickAround: false));
+      NavigationUtils.navigateToPage(
+          context: context, widget: const LandingPage(stickAround: false));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,46 +116,63 @@ class InfoPageState extends State<InfoPage>
           padding: const EdgeInsets.all(8.0),
           child: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    user == null ? '' : '${user?.name}',
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                  gapH16,
-                  gapH16,
-                  GestureDetector(
-                    onDoubleTap: () async {
-                       _logOut();
-                    },
-                    child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 2000),
-                        curve: Curves.bounceIn,
-                        child: Image.asset(
-                          'assets/banner1.webp',
-                          fit: BoxFit.fill,
-                        )),
-                  ),
-                  gapH16,
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                        'Welcome to the Busha Mobile Dev Assessment app built with Flutter with support from backend BushaBackend, built with NodeJS, NestJS and Firebase'),
-                  ),
-                  gapH32,
-                  TextButton(
-                      onPressed: () {
-                        _navigateToGitHub();
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      user == null ? '' : '${user?.name}',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    gapH32,
+                    GestureDetector(
+                      onDoubleTap: () async {
+                        _logOut();
                       },
-                      child: const Text('View the code on GitHub')),
-                  gapH32,
-                  ElevatedButton(onPressed: () async {
-                    _close();
-                    Navigator.of(context).pop();
-                  }, child: const Text('Close')),
-                ],
+                      child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 2000),
+                          curve: Curves.bounceIn,
+                          child: Image.asset(
+                            'assets/banner1.webp',
+                            fit: BoxFit.fill,
+                          )),
+                    ),
+                    gapH8,
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(desc),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          _navigateToGitFrontEnd();
+                        },
+                        child: Text('View Busha Flutter code on GitHub',
+                            style: myTextStyleMediumBoldPrimaryColor(context))),
+                    TextButton(
+                      onPressed: () {
+                        _navigateToGitBackEnd();
+                      },
+                      child: Text('View Busha Backend code on GitHub',
+                          style: myTextStyleMediumBoldPrimaryColor(context)),
+                    ),
+                    gapH8,
+                    TextButton(
+                      onPressed: () {
+                        _navigateToGitProfile();
+                      },
+                      child: Text('View Developer Profile on GitHub',
+                          style: myTextStyleMediumBoldPrimaryColor(context)),
+                    ),
+                    gapH16,
+                    ElevatedButton(
+                        onPressed: () async {
+                          _close();
+                        },
+                        child: Text('Close',
+                            style: myTextStyleMediumBoldPrimaryColor(context))),
+                  ],
+                ),
               )
             ],
           ),
@@ -137,3 +181,8 @@ class InfoPageState extends State<InfoPage>
     );
   }
 }
+
+const desc = '''
+Welcome to the Busha Mobile Dev Assessment app! This app is built using Flutter for the front end, with a robust backend powered by NodeJS, NestJS, and Firebase, all hosted as a Docker container on Google Cloud Run.
+\nThe app runs on iOS and Android.
+''';

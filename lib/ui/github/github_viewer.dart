@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class GithubViewer extends StatefulWidget {
-  const GithubViewer({super.key});
+  const GithubViewer({super.key, required this.gitHubIndex});
 
   @override
   GithubViewerState createState() => GithubViewerState();
+  final int gitHubIndex;
 }
 
 class GithubViewerState extends State<GithubViewer> {
 
   static const frontEndUrl = 'https://github.com/malengatiger/test_flutter';
   static const backEndUrl = 'https://github.com/malengatiger/test_backend';
+  static const profileUrl = 'https://github.com/malengatiger';
+
 
   bool _showFrontEndRepo = true;
   late WebViewController controller;
@@ -23,6 +26,18 @@ class GithubViewerState extends State<GithubViewer> {
   }
 
   void _setWebView() {
+    String url = '';
+    switch(widget.gitHubIndex) {
+      case 0:
+        url = frontEndUrl;
+        break;
+      case 1:
+        url = backEndUrl;
+        break;
+      case 2:
+        url = profileUrl;
+        break;
+    }
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
@@ -43,7 +58,7 @@ class GithubViewerState extends State<GithubViewer> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(_showFrontEndRepo? frontEndUrl: backEndUrl));
+      ..loadRequest(Uri.parse(url));
 
   }
   @override

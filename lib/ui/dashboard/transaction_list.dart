@@ -2,7 +2,6 @@ import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/models/block.dart';
 import 'package:busha_app/models/next/block_transactions.dart';
 import 'package:busha_app/models/next/single_transaction.dart';
-import 'package:busha_app/ui/landing/landing_page.dart';
 import 'package:busha_app/util/gaps.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/styles.dart';
@@ -102,8 +101,7 @@ class _TransactionListState extends State<TransactionList> {
   }
 
   _navigateToLanding() {
-    NavigationUtils.navigateToPage(
-        context: context, widget: const InfoPage());
+    NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
 
   @override
@@ -128,7 +126,7 @@ class _TransactionListState extends State<TransactionList> {
     var mode = MediaQuery.of(context).platformBrightness;
     var date = DateTime.fromMillisecondsSinceEpoch(
         block == null ? 0 : block!.data!.time! * 1000);
-    final DateFormat formatter = DateFormat('EEEE, yyyy-MMMM-dd HH:mm');
+    final DateFormat formatter = DateFormat('EEEE, yyyy-MMMM-dd    HH:mm');
     final String formatted = formatter.format(date);
     if (block != null) {
       pp(' ... time: ${block!.data!.time} date: $formatted');
@@ -162,12 +160,23 @@ class _TransactionListState extends State<TransactionList> {
             children: [
               gapH32,
               Padding(
+                padding: const EdgeInsets.only(left:16.0),
+                child: Row(
+                  children: [
+                     Text('Hash', style: myTextStyleTinyGrey(context),),
+                    Padding(
+                        padding: const EdgeInsets.only(left: 24, right: 24),
+                        child: SizedBox(width: 260,
+                            child: Flexible(child: Text('${block?.data!.hash}', style: myTextStyleTiny(context),)))),
+                  ],
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: TransactionTotalWidget(
-                    title: 'Transaction Total',
-                    total: nf.format(total),
-                    size: 20.0),
+                    title: 'Total Value', total: nf.format(total), size: 28.0),
               ),
+              gapH16,
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -192,7 +201,7 @@ class _TransactionListState extends State<TransactionList> {
                           return Card(
                             elevation: 4,
                             child: SizedBox(
-                              height: 100,
+                              height: 120,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -200,28 +209,41 @@ class _TransactionListState extends State<TransactionList> {
                                     Flexible(
                                         child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(tx.hash!),
-                                    )),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          formatted,
-                                          style: mode == Brightness.light
-                                              ? myTextStyleSmallBlackBold(
-                                                  context)
-                                              : myTextStyleSmallBold(context),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 28, right: 28),
+                                        child: Text(
+                                          tx.hash!,
+                                          style: myTextStyleSmallWithColor(
+                                              context, Colors.grey.shade600),
                                         ),
-                                        Text(
-                                          '${index + 1}',
-                                          style: myTextStyle(
-                                              context,
-                                              Theme.of(context).primaryColor,
-                                              14,
-                                              FontWeight.w900),
-                                        )
-                                      ],
+                                      ),
+                                    )),
+                                    gapH16,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 36.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            formatted,
+                                            style: mode == Brightness.light
+                                                ? myTextStyleSmallBlackBold(
+                                                    context)
+                                                : myTextStyleSmallBold(context),
+                                          ),
+                                          Text(
+                                            '${index + 1}',
+                                            style: myTextStyle(
+                                                context,
+                                                Theme.of(context).primaryColor,
+                                                14,
+                                                FontWeight.w900),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -235,10 +257,12 @@ class _TransactionListState extends State<TransactionList> {
             ],
           ),
           _busy
-              ? const Positioned(child: Center(child: BusyIndicator(
-            caption: 'Loading transactions from the latest block. 🍎'
-                '\n\nThis task has been known to take a couple of minutes sometimes. Hang in there!',
-          )))
+              ? const Positioned(
+                  child: Center(
+                      child: BusyIndicator(
+                  caption: 'Loading transactions from the latest block. 🍎'
+                      '\n\nThis task has been known to take a couple of minutes sometimes. Hang in there!',
+                )))
               : gapH32,
         ],
       )),
@@ -264,11 +288,12 @@ class TransactionTotalWidget extends StatelessWidget {
         Text(
           title,
           style: myTextStyle(
-              context, Theme.of(context).primaryColor, size, FontWeight.w900),
+              context, Theme.of(context).primaryColor, 14, FontWeight.w300),
         ),
         Text(
           total,
-          style: myTextStyleMediumBold(context),
+          style: myTextStyle(
+              context, Theme.of(context).primaryColor, size, FontWeight.w900),
         ),
       ],
     );

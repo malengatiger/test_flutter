@@ -10,9 +10,10 @@ import 'package:http/http.dart';
 import '../models/user.dart';
 import 'net.dart';
 
+//https://busha-nest-1-ajtawuiiiq-ew.a.run.app
 class AuthService {
   static const localUrl = 'http://192.168.86.230:8080/';
-  static const remoteUrl = 'TBD';
+  static const remoteUrl = 'https://busha-nest-1-ajtawuiiiq-ew.a.run.app/';
   final Prefs prefs;
   static const mm = '🔑 🔑 AuthService 🔑';
 
@@ -43,12 +44,8 @@ class AuthService {
 
     var mFirestore = fs.FirebaseFirestore.instance;
     try {
-      String mUrl = '${localUrl}on-boarding/registerUser';
-      if (!kDebugMode) {
-        mUrl = '${remoteUrl}on-boarding/registerUser';
-      }
-      var response = await Net.post(url: mUrl, data: user.toJson(),
-          token: '');
+      var response = await Net.post(
+          path: 'on-boarding/registerUser', data: user.toJson(), token: '');
       if (response.statusCode == 200 || response.statusCode == 201) {
         pp('$mm registration response 🥬 status is OK!!: '
             '🥬 ${response.statusCode} ==> ${response.body}');
@@ -61,7 +58,6 @@ class AuthService {
         // var res = await mFirestore
         //     .collection('users').add(user.toJson());
         // pp('$mm Firestore add user result: $res');
-
       } else {
         pp('$mm BAD RESPONSE: ${response.statusCode}');
         throw Exception(
@@ -78,11 +74,7 @@ class AuthService {
     var token = await _getToken();
 
     try {
-      String mUrl = '${localUrl}getUserByEmail';
-      if (!kDebugMode) {
-        mUrl = '${remoteUrl}getUserByEmail';
-      }
-      var response = await Net.get(mUrl);
+      var response = await Net.get('getUserByEmail');
       if (response.statusCode == 200 || response.statusCode == 201) {
         pp('$mm User found 🥬 status is OK!!: 🥬 ${response.body}');
       } else {
