@@ -5,7 +5,7 @@
 
 This repository contains a Flutter application that implements the requirements as indicated for assessment. The app supports both Android and iOS devices. It can be dynamically set to dark or light mode. The user can also dynamically set the primary color that the app uses.
 
-The app accesses the various endpoints referenced through a connection to a GCP hosted NodeJS backend application. Authentication is provided via Firebase.
+The app accesses the various endpoints referenced through a connection to a **GCP** hosted NodeJS backend application. Authentication is provided via Firebase.
 
 ## Features implemented:
 
@@ -19,15 +19,18 @@ My Assets
 Settings
 
 
-## A glimpse of the app ..
 
-Mobile Dev Assessment App - a glance at the app!
+## Mobile Dev Assessment App - a glance at the app!
 
-![alt text](<Screenshot 2024-06-01 at 09.50.25.png>)
+The App in Dark Mode ...
 
-![alt text](<Screenshot 2024-06-01 at 13.42.08.png>)
+<img width="1103" alt="Screenshot 2024-06-01 at 09 50 25" src="https://github.com/malengatiger/test_flutter/assets/343710/75e0dd6f-06f4-46da-a884-2ebd741481a0">
+
+<img width="1451" alt="Screenshot 2024-06-01 at 13 42 08" src="https://github.com/malengatiger/test_flutter/assets/343710/e203ede6-380d-491a-a91e-74dff7f16140">
+
 
 The App in Light Mode ...
 
-![alt text](<Screenshot 2024-06-01 at 13.43.50.png>)
+<img width="1340" alt="Screenshot 2024-06-01 at 13 43 50" src="https://github.com/malengatiger/test_flutter/assets/343710/38c2199a-658a-4cb5-ba65-67db1dc7f542">
+
 
