@@ -24,12 +24,12 @@ Future<void> main() async {
   var app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  pp('$mm Firebase initialized: ${app.name}');
+  pp('$mm ... Firebase initialized: ${app.name}');
   pp('$mm Firebase options: ${app.options.asMap}');
   try {
     await RegisterServices.register();
   } catch (e) {
-    pp('Problem? $e');
+    pp('$mm Problem with RegisterServices? $e');
   }
 
   runApp(const MyApp());
