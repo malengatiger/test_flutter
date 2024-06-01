@@ -32,18 +32,16 @@ On first installation of the app the user has to register first. The email reque
 
 ## Mobile Dev Assessment App - a glance at the app!
 
-The App in Dark Mode ...
-
-## iOS app in Dark mode
+# iOS app in Dark mode
 
 <img width="1103" alt="Screenshot 2024-06-01 at 09 50 25" src="https://github.com/malengatiger/test_flutter/assets/343710/75e0dd6f-06f4-46da-a884-2ebd741481a0">
 
-## Android app in Dark mode
+# Android app in Dark mode
 
 <img width="1451" alt="Screenshot 2024-06-01 at 13 42 08" src="https://github.com/malengatiger/test_flutter/assets/343710/e203ede6-380d-491a-a91e-74dff7f16140">
 
 
-## iOS App in Light Mode ...
+# iOS App in Light Mode ...
 
 <img width="1340" alt="Screenshot 2024-06-01 at 13 43 50" src="https://github.com/malengatiger/test_flutter/assets/343710/38c2199a-658a-4cb5-ba65-67db1dc7f542">
 
