@@ -1,3 +1,4 @@
+import 'package:busha_app/util/gaps.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -48,6 +49,13 @@ class ArticleViewerState extends State<ArticleViewer> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('News Viewer'),
+        actions: const [
+          CircleAvatar(
+            radius: 18.0,
+            backgroundImage: AssetImage('assets/busha_logo.jpeg'),
+          ),
+          gapW16,
+        ],
       ),
       body: SafeArea(
         child: Stack(

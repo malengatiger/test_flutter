@@ -1,3 +1,4 @@
+import 'package:busha_app/misc/animated_widget.dart';
 import 'package:busha_app/misc/settings.dart';
 import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/ui/dashboard/dash_widget.dart';
@@ -12,11 +13,13 @@ import 'package:get_it/get_it.dart';
 
 import '../../models/user.dart';
 import '../../util/gaps.dart';
+import '../../util/styles.dart';
+import 'info_page.dart';
 
 class LandingPage extends StatefulWidget {
-  const LandingPage({super.key, required this.stickAround});
-
-  final bool stickAround;
+  const LandingPage({
+    super.key,
+  });
 
   @override
   LandingPageState createState() => LandingPageState();
@@ -40,7 +43,7 @@ class LandingPageState extends State<LandingPage>
     pp('$mm ... checking Firebase Auth status ...');
     user = prefs.getUser();
     await Future.delayed(const Duration(milliseconds: 100));
-    if (await AuthService.isSignedIn() && widget.stickAround == false) {
+    if (await AuthService.isSignedIn()) {
       _navigateToDashboard();
       return;
     }
@@ -86,16 +89,28 @@ class LandingPageState extends State<LandingPage>
 
   _navigateToGitFrontEnd() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const GithubViewer(gitHubIndex: 0,));
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 0,
+        ));
   }
+
   _navigateToGitBackEnd() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const GithubViewer(gitHubIndex: 1,));
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 1,
+        ));
   }
+
   _navigateToGitProfile() {
     NavigationUtils.navigateToPage(
-        context: context, widget: const GithubViewer(gitHubIndex: 3,));
+        context: context,
+        widget: const GithubViewer(
+          gitHubIndex: 2,
+        ));
   }
+
   _navigateToSettings() {
     pp('$mm _navigateToSettings');
     NavigationUtils.navigateToPage(
@@ -110,6 +125,8 @@ class LandingPageState extends State<LandingPage>
 
   @override
   Widget build(BuildContext context) {
+    var style =
+    myTextStyle(context, Theme.of(context).primaryColor, 16, FontWeight.w900);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -117,84 +134,80 @@ class LandingPageState extends State<LandingPage>
           style: Theme.of(context).textTheme.bodySmall,
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                _navigateToSettings();
-              },
-              icon: const Icon(Icons.settings))
+          AnimatedBushaLogo(onTapped: (){
+            NavigationUtils.navigateToPage(context: context, widget: const SettingsWidget());
+          }),
         ],
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Stack(
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    user == null ? '' : '${user?.name}',
-                    style: Theme.of(context).textTheme.headlineLarge,
-                  ),
-                  gapH8,
-                  widget.stickAround
-                      ? gapH16
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  _navigateToSignIn();
-                                },
-                                child: const Text('Sign In')),
-                            TextButton(
-                                onPressed: () {
-                                  _navigateToRegistration();
-                                },
-                                child: const Text('Register')),
-                          ],
-                        ),
-                  gapH8,
-                  AnimatedContainer(
-                      duration: const Duration(milliseconds: 2000),
-                      curve: Curves.bounceIn,
-                      child: Image.asset(
-                        'assets/banner1.webp',
-                        fit: BoxFit.fill,
-                      )),
-                  gapH8,
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                        'Welcome to the Busha Mobile Dev Assessment app built with Flutter with support from backend BushaBackend, built with NodeJS, NestJS and Firebase'),
-                  ),
-                  gapH16,
-                  TextButton(
-                      onPressed: () {
-                        _navigateToGitFrontEnd();
-                      },
-                      child: const Text('View the Flutter code on GitHub')),
-                  gapH16,
-                  TextButton(
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              _navigateToSignIn();
+                            },
+                            child: Text(
+                              'Sign In',
+                              style: myTextStyleMediumLarge(context, 20),
+                            )),
+                        TextButton(
+                            onPressed: () {
+                              _navigateToRegistration();
+                            },
+                            child: Text(
+                              'Register',
+                              style: myTextStyleMediumLarge(context, 20),
+                            )),
+                      ],
+                    ),
+                    gapH32,
+                    AnimatedContainer(
+                        duration: const Duration(milliseconds: 2000),
+                        curve: Curves.bounceIn,
+                        child: Image.asset(
+                          'assets/banner1.webp',
+                          fit: BoxFit.fill,
+                        )),
+                    gapH32,
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(desc),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          _navigateToGitFrontEnd();
+                        },
+                        child: Text('View Busha Flutter code on GitHub',
+                            style: style)),
+                    TextButton(
                       onPressed: () {
                         _navigateToGitBackEnd();
                       },
-                      child: const Text('View the NodeJS code on GitHub')),
-                  gapH16,
-                  TextButton(
+                      child: Text('View Busha Backend code on GitHub',
+                          style: style),
+                    ),
+                    gapH8,
+                    TextButton(
                       onPressed: () {
                         _navigateToGitProfile();
                       },
-                      child: const Text('View personal profile GitHub')),
-                  gapH16,
-                  ElevatedButton(
-                      onPressed: () async {
-                        _checkStatus();
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Close')),
-                ],
+                      child: Text('View Developer Profile on GitHub',
+                          style: style),
+                    ),
+                    gapH16,
+                  ],
+                ),
               )
             ],
           ),

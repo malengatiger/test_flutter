@@ -86,9 +86,10 @@ TextStyle myTextStyleSmallBlackBold(BuildContext context) {
       fontWeight: FontWeight.w700, fontSize: 16,
       color: Colors.black);
 }
-TextStyle myTextStyleSmallBold(BuildContext context) {
+TextStyle myTextStyleSmallBold(BuildContext context, Color color) {
   return GoogleFonts.lato(
-      textStyle: Theme.of(context).textTheme.bodyMedium,
+      textStyle: Theme.of(context).textTheme.bodySmall,
+      color: color,
       fontWeight: FontWeight.w700, fontSize: 16,);
 }
 
@@ -211,7 +212,7 @@ TextStyle myTextStyleMediumBoldPrimaryColor(BuildContext context) {
   return GoogleFonts.lato(
       textStyle: Theme.of(context).textTheme.bodyMedium,
       fontWeight: FontWeight.w900,
-      // fontSize: 20,
+      fontSize: 20,
       color: Theme.of(context).primaryColor);
 }
 

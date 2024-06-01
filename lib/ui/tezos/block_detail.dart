@@ -50,7 +50,8 @@ class BlockDetail extends StatelessWidget {
                       Flexible(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 48, right: 48),
-                            child: Text('${tezosBlock.hash}', style: myTextStyleSmallBold(context),),
+                            child: Text('${tezosBlock.hash}',
+                              style: myTextStyleSmallBold(context, Colors.grey.shade600),),
                           )),
 
                     ],
@@ -111,7 +112,10 @@ class BlockDetail extends StatelessWidget {
                 gapH32,
                 GestureDetector(
                   onTap: (){
-                    showToast(message: 'Not quite there yet! Sorry!', context: context);
+                    showToast(
+                        textStyle:  const TextStyle(color: Colors.white),
+                        backgroundColor: Colors.deepOrange.shade600,
+                        message: 'Not quite there yet! Sorry!', context: context);
                   },
                   child: const Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -1,13 +1,12 @@
+import 'package:busha_app/util/styles.dart';
 import 'package:flutter/material.dart';
 
-import '../../util/functions.dart';
 import '../../util/gaps.dart';
 
 class UserForm extends StatelessWidget {
   final TextEditingController? nameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final bool busy;
   final Function onSubmit;
   final GlobalKey<FormState> formKey;
   final bool isRegistration;
@@ -17,7 +16,6 @@ class UserForm extends StatelessWidget {
     this.nameController,
     required this.emailController,
     required this.passwordController,
-    required this.busy,
     required this.onSubmit,
     required this.formKey,
     required this.isRegistration,
@@ -29,24 +27,22 @@ class UserForm extends StatelessWidget {
       child: Form(
         key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
-
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
               const CircleAvatar(
                 radius: 48.0,
                 backgroundImage: AssetImage('assets/busha_logo.jpeg'),
-
               ),
               gapH16,
               Text(
                 isRegistration ? 'Busha Registration' : 'Busha SignIn',
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: myTextStyleLargePrimaryColor(context),
               ),
+              gapH32,
               gapH32,
               isRegistration
                   ? TextFormField(
@@ -96,36 +92,31 @@ class UserForm extends StatelessWidget {
               ),
               gapH32,
               gapH32,
-              busy
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 6,
-                        backgroundColor: Colors.pink,
-                      ),
-                    )
-                  : SizedBox(
-                      width: 300,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          onSubmit();
-                        },
-                        style: const ButtonStyle(
-                          elevation: WidgetStatePropertyAll(8.0),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text('Submit'),
-                        ),
-                      ),
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                  onPressed: () {
+                    onSubmit();
+                  },
+                  style: const ButtonStyle(
+                    elevation: WidgetStatePropertyAll(8.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      'Submit',
+                      style: myTextStyleMediumLarge(context, 24),
                     ),
+                  ),
+                ),
+              ),
               gapH32,
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Cancel'))
+                  child: const Text('Cancel')),
+              gapH32,
             ],
           ),
         ),

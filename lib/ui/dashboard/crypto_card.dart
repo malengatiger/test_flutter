@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class CryptoCard extends StatelessWidget {
+class CryptoCard extends StatefulWidget {
   const CryptoCard(
       {super.key,
       required this.name,
@@ -21,6 +21,43 @@ class CryptoCard extends StatelessWidget {
   final double percentage;
 
   @override
+  State<CryptoCard> createState() => _CryptoCardState();
+}
+
+class _CryptoCardState extends State<CryptoCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation animation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 1000),
+        reverseDuration: const Duration(milliseconds: 500),
+        vsync: this);
+
+    animation = Tween<double>(begin: 0, end: 48).animate(_controller)
+      ..addListener(() {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    super.initState();
+    _startAnimation();
+  }
+
+  Future<void> _startAnimation() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var nf = NumberFormat('##,###,###,###');
     return Card(
@@ -29,23 +66,25 @@ class CryptoCard extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         child: Row(
           children: [
-            SizedBox(height: 96,
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                    imagePath,
-                    height: 56,
-                    width: 56,
-                  ),
-                ]
-              ),
+            SizedBox(
+              height: animation.value,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      widget.imagePath,
+                      height: animation.value,
+                      width: animation.value,
+                    ),
+                  ]),
             ),
             gapW16,
             SizedBox(
               height: 96,
               width: 240,
-              child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   gapH16,
@@ -53,22 +92,26 @@ class CryptoCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        name,
+                        widget.name,
                         style: myTextStyleMediumBold(context),
                       ),
-                      Text(nf.format(amount), style: myTextStyleLarge(context),),
+                      Text(
+                        nf.format(widget.amount),
+                        style: myTextStyleLarge(context),
+                      ),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        ticker,
+                        widget.ticker,
                         style: myTextStyleMediumGrey(context),
                       ),
                       SuffixWidget(
-                        upArrow: upArrow,
-                        percentage: percentage, fontSize: 16,
+                        upArrow: widget.upArrow,
+                        percentage: widget.percentage,
+                        fontSize: 16,
                       ),
                     ],
                   ),
@@ -84,7 +127,10 @@ class CryptoCard extends StatelessWidget {
 
 class SuffixWidget extends StatelessWidget {
   const SuffixWidget(
-      {super.key, required this.upArrow, required this.percentage, required this.fontSize});
+      {super.key,
+      required this.upArrow,
+      required this.percentage,
+      required this.fontSize});
 
   final bool upArrow;
   final double percentage, fontSize;
@@ -100,7 +146,6 @@ class SuffixWidget extends StatelessWidget {
         arrowBackgroundColor = Colors.green.shade800;
       } else {
         arrowBackgroundColor = Colors.red.shade800;
-
       }
     } else {
       containerColor = Colors.green.shade50;
@@ -108,7 +153,6 @@ class SuffixWidget extends StatelessWidget {
         arrowBackgroundColor = Colors.green.shade800;
       } else {
         arrowBackgroundColor = Colors.red.shade800;
-
       }
     }
     var st = GoogleFonts.lato(
@@ -118,7 +162,7 @@ class SuffixWidget extends StatelessWidget {
       color: arrowBackgroundColor,
     );
     return Container(
-      width: 120,
+      width: 140,
       color: containerColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

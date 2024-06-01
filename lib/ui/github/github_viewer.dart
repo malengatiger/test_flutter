@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../util/functions.dart';
+import '../../util/gaps.dart';
+
 class GithubViewer extends StatefulWidget {
   const GithubViewer({super.key, required this.gitHubIndex});
 
@@ -26,7 +29,7 @@ class GithubViewerState extends State<GithubViewer> {
   }
 
   void _setWebView() {
-    String url = '';
+    String url = frontEndUrl;
     switch(widget.gitHubIndex) {
       case 0:
         url = frontEndUrl;
@@ -38,6 +41,7 @@ class GithubViewerState extends State<GithubViewer> {
         url = profileUrl;
         break;
     }
+    pp('... loading $url ... ');
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
@@ -46,11 +50,20 @@ class GithubViewerState extends State<GithubViewer> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onHttpError: (HttpResponseError error) {},
-          onWebResourceError: (WebResourceError error) {},
+          onPageStarted: (String url) {
+            pp('page onPageStarted: $url');
+          },
+          onPageFinished: (String url) {
+            pp('page onPageFinished: $url');
+          },
+          onHttpError: (HttpResponseError error) {
+            pp('page HttpResponseError: ${error.response?.statusCode}');
+          },
+          onWebResourceError: (WebResourceError error) {
+            pp('page onWebResourceError: ${error.description}');
+          },
           onNavigationRequest: (NavigationRequest request) {
+            pp('page onNavigationRequest');
             if (request.url.startsWith('https://www.youtube.com/')) {
               return NavigationDecision.prevent;
             }
@@ -58,6 +71,7 @@ class GithubViewerState extends State<GithubViewer> {
           },
         ),
       )
+
       ..loadRequest(Uri.parse(url));
 
   }
@@ -73,6 +87,11 @@ class GithubViewerState extends State<GithubViewer> {
               _showFrontEndRepo = !_showFrontEndRepo;
             });
           }, icon:  Icon(_showFrontEndRepo? Icons.flip_to_front: Icons.back_hand)),
+          const CircleAvatar(
+            radius: 18.0,
+            backgroundImage: AssetImage('assets/busha_logo.jpeg'),
+          ),
+          gapW8,
         ],
       ),
       body: SafeArea(

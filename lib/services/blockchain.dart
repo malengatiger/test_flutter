@@ -82,6 +82,7 @@ class BlockchainService {
       if (resp.statusCode == 200 || resp.statusCode == 201) {
         blockTransactions = BlockTransactions.fromJson(xJson);
 
+        var length = jsonEncode(blockTransactions).length;
         pp('$mm ... getBlockTransactions response'
             '... 🌿🌿🌿 '
             '\n  🌿 hash: ${blockTransactions.hash}  🍐  '

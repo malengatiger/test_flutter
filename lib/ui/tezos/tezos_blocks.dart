@@ -102,13 +102,17 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
       body:  SafeArea(
           child: Stack(
         children: [
-          Column(
-            children: [
-              block == null? gapH32:Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: BlockDetail(tezosBlock: block!),
-              ),
-            ],
+          SingleChildScrollView(
+            child: Column(mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                gapH32,
+                block == null? gapH32:Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: BlockDetail(tezosBlock: block!),
+                ),
+              ],
+            ),
           ),
           _busy? const Positioned(child: Center(
             child: BusyIndicator(

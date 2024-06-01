@@ -76,13 +76,13 @@ class NewsWidgetState extends State<NewsWidget> {
     return SizedBox(
       height: 600,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           pp('... newsRefreshListener.setRefresh ... ');
           newsRefreshListener.setRefresh();
         },
         child: bd.Badge(
           badgeContent: news == null
-              ?const Text('0')
+              ? const Text('0')
               : Text(
                   '${news!.results!.length}',
                   style: const TextStyle(color: Colors.white),
@@ -142,13 +142,18 @@ class NewsItem extends StatelessWidget {
                 : Image.network(
                     '${result.imageUrl}',
                     height: 200,
+                    errorBuilder: (_, object, stackTrace) {
+                      pp('... 😡😡😡 broken image url: ${result.imageUrl}');
+                      return Image.asset('assets/busha_logo.jpeg', height: 32, width: 32,);
+                      // return const Text('Possible broken image link');
+                    },
                   ),
             result.title == null
                 ? gapH16
                 : Flexible(
                     child: Text(
                     '${result.title}',
-                    style: myTextStyleSmallBold(context),
+                    style: myTextStyleSmallBold(context, Colors.grey.shade600),
                   )),
           ],
         ),

@@ -135,10 +135,11 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
               _navigateToLanding();
             },
             child: const CircleAvatar(
-              radius: 24.0,
+              radius: 18.0,
               backgroundImage: AssetImage('assets/busha_logo.jpeg'),
             ),
           ),
+          gapW16,
         ],
       ),
       body: SafeArea(
@@ -161,7 +162,7 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                             Expanded(
                               child: ListView(
                                 children: [
-                                  gapH32,
+                                  // gapH32,
                                   GestureDetector(
                                     onTap: () {
                                       _navigateToTransactions();
@@ -181,7 +182,11 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.all(4.0),
-                                              child: Text(block!.data!.hash!),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 24.0,right: 24),
+                                                child: Text(block!.data!.hash!,
+                                                  style: myTextStyleSmallBold(context, Colors.grey.shade600),),
+                                              ),
                                             ),
                                             gapH16,
                                             Text(
@@ -189,7 +194,7 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                                               style: myTextStyle(
                                                   context,
                                                   Colors.blue,
-                                                  15,
+                                                  14,
                                                   FontWeight.w500),
                                             ),
                                             gapH16,
@@ -198,7 +203,6 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                                       ),
                                     ),
                                   ),
-                                  gapH32,
                                   gapH32,
                                   Card(
                                     elevation: 2.0,
@@ -280,6 +284,8 @@ class _LatestBlockWidgetState extends State<LatestBlockWidget> {
                                       onTap: () {
                                         pp('... newsRefreshListener.setRefresh ... ');
                                         showToast(
+                                            textStyle: const TextStyle(color: Colors.white),
+                                            backgroundColor: Colors.indigo.shade600,
                                             message:
                                                 'Under Construction, check us out later!',
                                             context: context);

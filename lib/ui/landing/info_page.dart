@@ -91,7 +91,7 @@ class InfoPageState extends State<InfoPage>
     if (mounted) {
       Navigator.of(context).pop();
       NavigationUtils.navigateToPage(
-          context: context, widget: const LandingPage(stickAround: false));
+          context: context, widget: const LandingPage());
     }
   }
 

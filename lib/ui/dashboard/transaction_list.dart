@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/models/block.dart';
 import 'package:busha_app/models/next/block_transactions.dart';
@@ -73,6 +75,8 @@ class _TransactionListState extends State<TransactionList> {
     });
   }
 
+  String? responseLength;
+
   Future _getBlockTransactions() async {
     pp('$mm .......... _getBlockTransactions ......');
 
@@ -88,6 +92,9 @@ class _TransactionListState extends State<TransactionList> {
       _blockTransactions =
           await blockchainService.getBlockTransactions(block!.data!.hash!);
       pp('$mm _blockTransactions returned, 🍎 mainChain: ${_blockTransactions!.mainChain!} 🍎');
+      var length = jsonEncode(_blockTransactions).length;
+      responseLength = (length / 1024 / 1024).toStringAsFixed(2);
+      pp('\n  🌿 Length of response in bytes: $responseLength} MB 🍐');
     } catch (e, s) {
       pp('$mm ERROR: $e $s');
       if (mounted) {
@@ -138,6 +145,9 @@ class _TransactionListState extends State<TransactionList> {
         actions: [
           IconButton(
               onPressed: () {
+                setState(() {
+                  responseLength = null;
+                });
                 _getBlockTransactions();
               },
               icon: const Icon(Icons.refresh)),
@@ -146,10 +156,11 @@ class _TransactionListState extends State<TransactionList> {
               _navigateToLanding();
             },
             child: const CircleAvatar(
-              radius: 24.0,
+              radius: 18.0,
               backgroundImage: AssetImage('assets/busha_logo.jpeg'),
             ),
           ),
+          gapW16,
         ],
       ),
       body: SafeArea(
@@ -160,14 +171,22 @@ class _TransactionListState extends State<TransactionList> {
             children: [
               gapH32,
               Padding(
-                padding: const EdgeInsets.only(left:16.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
-                     Text('Hash', style: myTextStyleTinyGrey(context),),
+                    Text(
+                      'Hash',
+                      style: myTextStyleTinyGrey(context),
+                    ),
                     Padding(
                         padding: const EdgeInsets.only(left: 24, right: 24),
-                        child: SizedBox(width: 260,
-                            child: Flexible(child: Text('${block?.data!.hash}', style: myTextStyleTiny(context),)))),
+                        child: SizedBox(
+                            width: 260,
+                            child: Flexible(
+                                child: Text(
+                              '${block?.data!.hash}',
+                              style: myTextStyleTiny(context),
+                            )))),
                   ],
                 ),
               ),
@@ -230,9 +249,10 @@ class _TransactionListState extends State<TransactionList> {
                                           Text(
                                             formatted,
                                             style: mode == Brightness.light
-                                                ? myTextStyleSmallBlackBold(
-                                                    context)
-                                                : myTextStyleSmallBold(context),
+                                                ? myTextStyleSmallBold(
+                                                    context, Colors.black)
+                                                : myTextStyleSmallBold(context,
+                                                    Colors.grey.shade600),
                                           ),
                                           Text(
                                             '${index + 1}',
@@ -256,6 +276,32 @@ class _TransactionListState extends State<TransactionList> {
               ),
             ],
           ),
+          responseLength == null
+              ? gapW16
+              : Positioned(
+                  left: 8,
+                  bottom: 8,
+                  child: Card(
+                    color: Colors.teal,
+                    elevation: 8,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Size of Response',
+                            style:
+                                myTextStyleSmallBold(context, Colors.black),
+                          ),
+                          gapW16,
+                          Text(
+                            '${responseLength!} MB',
+                            style: myTextStyleMediumLarge(context, 20),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
           _busy
               ? const Positioned(
                   child: Center(

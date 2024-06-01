@@ -1,10 +1,16 @@
+import 'package:busha_app/misc/animated_widget.dart';
+import 'package:busha_app/misc/settings.dart';
 import 'package:busha_app/services/auth.dart';
+import 'package:busha_app/ui/dashboard/dash_widget.dart';
 import 'package:busha_app/ui/on_boarding/user_form.dart';
+import 'package:busha_app/util/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-
+import 'package:email_validator/email_validator.dart';
+import '../../misc/busy_indicator.dart';
 import '../../models/user.dart';
 import '../../util/functions.dart';
+import '../../util/toasts.dart';
 
 class UserSignInWidget extends StatefulWidget {
   const UserSignInWidget({super.key, required this.onUserSignedIn});
@@ -33,19 +39,27 @@ class UserSignInWidgetState extends State<UserSignInWidget>
     super.initState();
   }
 
-  Future signInUser() async {
-   pp('$mm signInUser ...');
+  Future _signInUser() async {
+    pp('$mm ................... signInUser ...');
+    if (!EmailValidator.validate(_emailController.text)) {
+      pp('$mm _signInUser: EmailValidator says NO!');
+      showToast(
+          message: 'Please enter properly formatted email address',
+          context: context);
+      return;
+    }
     try {
       setState(() {
         _busy = true;
       });
-      var user = await _authService.signIn(_emailController.text, _passwordController.text);
+      var user = await _authService.signIn(
+          _emailController.text, _passwordController.text);
       if (user != null) {
         pp('$mm user signed in: ${user.toJson()}');
+        _navigateToDashboard();
       } else {
         if (mounted) {
-          showErrorDialog(
-              message: 'Bad signIn response', context: context);
+          showErrorDialog(message: 'Bad signIn response', context: context);
         }
       }
     } catch (e) {
@@ -59,6 +73,12 @@ class UserSignInWidgetState extends State<UserSignInWidget>
     });
   }
 
+  _navigateToDashboard() {
+    Navigator.of(context).pop();
+    NavigationUtils.navigateToPage(
+        context: context, widget: const DashWidget());
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -68,26 +88,37 @@ class UserSignInWidgetState extends State<UserSignInWidget>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Busha Dev Assessment'),
+        actions: [
+          AnimatedBushaLogo(onTapped: (){
+            NavigationUtils.navigateToPage(context: context, widget: const SettingsWidget());
+          }),
+        ],
+      ),
       body: SafeArea(
         child: Stack(
           children: [
-            Card(
-              elevation: 8,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: UserForm(
-                    emailController: _emailController,
-                    passwordController: _passwordController,
-                    busy: _busy,
-                    onSubmit: () {
-                      if (_formKey.currentState!.validate()) {
-                        signInUser();
-                      }
-                    },
-                    formKey: _formKey,
-                    isRegistration: false),
-              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _busy
+                  ? const Center(
+                    child: BusyIndicator(
+                        caption:
+                            'Busha signing you up so you can play with the app ',
+                      ),
+                  )
+                  : UserForm(
+                      emailController: _emailController,
+                      passwordController: _passwordController,
+                      onSubmit: () {
+                        pp('$mm onSubmit: validate sign in form ..');
+                        if (_formKey.currentState!.validate()) {
+                          _signInUser();
+                        }
+                      },
+                      formKey: _formKey,
+                      isRegistration: false),
             ),
           ],
         ),

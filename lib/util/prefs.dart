@@ -44,7 +44,7 @@ class Prefs {
     var modeJson = sharedPreferences.getString('modeAndColor');
     if (modeJson == null) {
       pp('$mm ... mode not found, returning 1 = mLIGHTMode');
-      return  ModeAndColor(colorIndex: 0, mode: mLIGHTMode);
+      return  ModeAndColor(colorIndex: 0, mode: mDARKMode);
     }
     var ma = ModeAndColor.fromJson(jsonDecode(modeJson));
     pp('$mm ModeAndColor retrieved: ${ma.toJson()}');

@@ -9,6 +9,7 @@ import 'package:busha_app/ui/news/news_widget.dart';
 import 'package:busha_app/ui/dashboard/top_movers_carousel.dart';
 import 'package:busha_app/ui/dashboard/transaction_list.dart';
 import 'package:busha_app/ui/tezos/tezos_blocks.dart';
+import 'package:busha_app/util/carousel_data.dart';
 import 'package:busha_app/util/gaps.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/news_refresh_listener.dart';
@@ -37,7 +38,8 @@ class DashWidgetState extends State<DashWidget>
   late AnimationController _controller;
 
   final Prefs prefs = GetIt.instance<Prefs>();
-  final NewsRefreshListener newsRefreshListener = GetIt.instance<NewsRefreshListener>();
+  final NewsRefreshListener newsRefreshListener =
+      GetIt.instance<NewsRefreshListener>();
 
   final BlockchainService blockchainService =
       GetIt.instance<BlockchainService>();
@@ -62,41 +64,7 @@ class DashWidgetState extends State<DashWidget>
 
   void _getUser() {
     user = prefs.getUser();
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/bitcoin.svg',
-        name: 'Bitcoin',
-        upArrow: true,
-        percentage: 19.88));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/ethereum.svg',
-        name: 'Ethereum',
-        upArrow: true,
-        percentage: 4.73));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/tezos.svg',
-        name: 'Tezos',
-        upArrow: true,
-        percentage: 2.85));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/doge.svg',
-        name: 'Doge',
-        upArrow: true,
-        percentage: 15.42));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/shibu.svg',
-        name: 'Shibu',
-        upArrow: true,
-        percentage: 13.5));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/litecoin.svg',
-        name: 'Litecoin',
-        upArrow: true,
-        percentage: 8.12));
-    carouselDataList.add(CarouselData(
-        imagePath: 'assets/logos/usdc.svg',
-        name: 'USDC',
-        upArrow: true,
-        percentage: 15.42));
+    carouselDataList = getCarouselData();
     setState(() {});
   }
 
@@ -122,13 +90,16 @@ class DashWidgetState extends State<DashWidget>
     NavigationUtils.navigateToPage(
         context: context, widget: const SettingsWidget());
   }
+
   _navigateToTezosBlock() {
     NavigationUtils.navigateToPage(
         context: context, widget: const TezosBlockWidget());
   }
+
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
+
   @override
   Widget build(BuildContext context) {
     var nf = NumberFormat('###,###,###,###');
@@ -138,46 +109,51 @@ class DashWidgetState extends State<DashWidget>
           'Busha Dashboard',
           style: myTextStyleMediumBoldPrimaryColor(context),
         ),
-        bottom: PreferredSize(preferredSize: const Size.fromHeight(100), child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    user == null ? '' : user!.name!,
-                    style: myTextStyleSmallBoldPrimaryColor(context),
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(100),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(
+                        user == null ? '' : user!.name!,
+                        style: myTextStyleSmallBoldPrimaryColor(context),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20.0, top: 0, bottom: 0, right: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'My Assets',
+                        style: myTextStyleLarge(context),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(nf.format(_totalAssets),
+                            style: myNumberStyleLargerPrimaryColor(context)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20.0, top: 8, bottom: 8, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'My Assets',
-                    style: myTextStyleLarge(context),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(nf.format(_totalAssets),
-                        style: myNumberStyleLargerPrimaryColor(context)),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )),
-        actions:  [
-          IconButton(onPressed: (){
-            _navigateToSettings();
-          }, icon: const Icon(Icons.settings)),
+                ),
+                gapH16,
+              ],
+            )),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _navigateToSettings();
+              },
+              icon: const Icon(Icons.settings)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               _navigateToLanding();
             },
             child: const CircleAvatar(
@@ -194,10 +170,8 @@ class DashWidgetState extends State<DashWidget>
           SingleChildScrollView(
             child: Column(
               children: [
-
-
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   child: CryptoCard(
                       name: 'Bitcoin',
                       ticker: 'BTC',
@@ -207,7 +181,7 @@ class DashWidgetState extends State<DashWidget>
                       percentage: 18.92),
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   child: CryptoCard(
                       name: 'Ethereum',
                       ticker: 'ETH',
@@ -217,7 +191,7 @@ class DashWidgetState extends State<DashWidget>
                       percentage: 6.48),
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   child: CryptoCard(
                       name: 'Tezos',
                       ticker: 'XTZ',
@@ -226,7 +200,7 @@ class DashWidgetState extends State<DashWidget>
                       amount: _tezosAssets,
                       percentage: -4.91),
                 ),
-                gapH32,
+                gapH8,
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 16.0, top: 8, bottom: 8, right: 16),
@@ -238,8 +212,10 @@ class DashWidgetState extends State<DashWidget>
                         style: myTextStyleLarge(context),
                       ),
                       bd.Badge(
-                        badgeContent: Text('${carouselDataList.length}',
-                        style: const TextStyle(color: Colors.white),),
+                        badgeContent: Text(
+                          '${carouselDataList.length}',
+                          style: const TextStyle(color: Colors.white),
+                        ),
                         badgeStyle: bd.BadgeStyle(
                           badgeColor: Colors.green.shade800,
                           padding: const EdgeInsets.all(12),
@@ -248,7 +224,7 @@ class DashWidgetState extends State<DashWidget>
                     ],
                   ),
                 ),
-                gapH32,
+                gapH8,
                 TopMoversCarousel(
                     carouselData: carouselDataList,
                     carouselController: carouselController),
@@ -256,18 +232,22 @@ class DashWidgetState extends State<DashWidget>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       pp('$mm I really want to refresh the news');
                       newsRefreshListener.setRefresh();
                     },
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // gapW16,
                         Text(
                           'Trending News',
                           style: myTextStyleLarge(context),
                         ),
-                        Text('Tap to refresh the news', style: myTextStyleTinyGrey(context),),
+                        Text(
+                          'Tap to refresh the news',
+                          style: myTextStyleTinyGrey(context),
+                        ),
                       ],
                     ),
                   ),
@@ -296,12 +276,18 @@ class DashWidgetState extends State<DashWidget>
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-              icon: const Icon(Icons.ac_unit, color: Colors.amber,),
+              icon: const Icon(
+                Icons.ac_unit,
+                color: Colors.amber,
+              ),
               label: 'Tezos Block',
               tooltip: 'Get Tezos Block',
               backgroundColor: Theme.of(context).primaryColorLight),
           BottomNavigationBarItem(
-              icon: const Icon(Icons.cloud_download, color: Colors.green,),
+              icon: const Icon(
+                Icons.cloud_download,
+                color: Colors.green,
+              ),
               label: 'Latest Block',
               tooltip: 'Get Latest Block',
               backgroundColor: Theme.of(context).primaryColorLight),
