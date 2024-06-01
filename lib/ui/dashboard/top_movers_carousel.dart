@@ -1,4 +1,5 @@
 import 'package:busha_app/ui/dashboard/top_movers_item.dart';
+import 'package:busha_app/util/toasts.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,14 @@ class TopMoversCarousel extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemBuilder: (_,index){
         var cd = carouselData.elementAt(index);
-        return TopMoverItem(carouselData: cd, fontSize: 20, index: index + 1,);
+        return GestureDetector(
+            onTap: (){
+              showToast(
+                  backgroundColor: Colors.indigo,
+                  textStyle: const TextStyle(color: Colors.white),
+                  message: ' 🍐 🍐 🍐 Details are not available yet. Feature under construction ...', context: context);
+            },
+            child: TopMoverItem(carouselData: cd, fontSize: 20, index: index + 1,));
       }),
     );
   }
