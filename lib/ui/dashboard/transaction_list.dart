@@ -10,7 +10,6 @@ import 'package:busha_app/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:badges/badges.dart' as bd;
 
 import '../../services/blockchain.dart';
 import '../../util/functions.dart';

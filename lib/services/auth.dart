@@ -4,7 +4,6 @@ import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart' as m_auth;
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 import '../models/user.dart';

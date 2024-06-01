@@ -4,7 +4,6 @@ import 'package:busha_app/util/gaps.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../models/block.dart';
 
 class BlockTransactionsWidget extends StatelessWidget {
   const BlockTransactionsWidget({super.key, required this.blockTransactions});
@@ -94,7 +93,7 @@ class BlockTransactionsWidget extends StatelessWidget {
                                         'Time',
                                         style: style,
                                       ),
-                                      Text(formatted!),
+                                      Text(formatted),
                                     ],
                                   ),
                                 ),

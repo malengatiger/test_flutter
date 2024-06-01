@@ -1,5 +1,4 @@
 import 'package:busha_app/util/functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AnimatedBushaLogo extends StatefulWidget {

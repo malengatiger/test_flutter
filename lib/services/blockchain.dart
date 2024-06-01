@@ -7,7 +7,6 @@ import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/functions.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pretty_print_json/pretty_print_json.dart';
 
 import '../models/next/block_transactions.dart';
 
@@ -27,7 +26,7 @@ class BlockchainService {
         block = Block.fromJson(jsonDecode(resp.body));
         pp('$mm getLatestBlock ...  🍐 \n block time: 🍐 ${block.data!.time}  🍐');
       }
-    } catch (e, s) {
+    } catch (e) {
       pp(e);
       throw Exception('Get latest block failed: $e');
     }

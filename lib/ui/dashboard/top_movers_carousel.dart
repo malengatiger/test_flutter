@@ -1,6 +1,5 @@
 import 'package:busha_app/ui/dashboard/top_movers_item.dart';
 import 'package:busha_app/util/toasts.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 

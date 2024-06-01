@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import '../../models/block.dart';
-import '../landing/landing_page.dart';
 
 class LatestBlockWidget extends StatefulWidget {
   const LatestBlockWidget({

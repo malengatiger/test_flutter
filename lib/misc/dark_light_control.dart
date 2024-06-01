@@ -4,7 +4,6 @@ import 'dart:async';
 
 
 import '../models/mode_and_color.dart';
-import '../util/prefs.dart';
 
 class ModeListener {
   ModeListener();
