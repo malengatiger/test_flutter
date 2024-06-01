@@ -64,13 +64,14 @@ class LandingPageState extends State<LandingPage>
           if (mounted) {
             setState(() {});
           }
-          await Future.delayed(const Duration(milliseconds: 200));
           if (mounted) {
+            Navigator.of(context).pop();
             showToast(
+                duration: const Duration(milliseconds: 5000),
+                backgroundColor: Colors.indigo.shade700,
                 message:
                     'You are registered on the Busha Assessment App. \n\n🍎🍎🍎 Welcome aboard!! ',
                 context: context);
-            Navigator.of(context).pop();
             _navigateToDashboard();
           }
         }));
@@ -83,11 +84,14 @@ class LandingPageState extends State<LandingPage>
         widget: UserSignInWidget(onUserSignedIn: (u) {
           pp('$mm ... user is signed in ok: ${u.toJson()}');
           if (mounted) {
+            Navigator.of(context).pop();
             showToast(
+                duration: const Duration(milliseconds: 5000),
+                backgroundColor: Colors.indigo.shade700,
+                textStyle: const TextStyle(color: Colors.white),
                 message:
                     'You are signed in on the Busha Assessment App. \n\n🍎🍎🍎 Welcome back!! ',
                 context: context);
-            Navigator.of(context).pop();
             _navigateToDashboard();
           }
         }));

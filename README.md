@@ -40,7 +40,7 @@ On first installation of the app the user has to register first. The email reque
 
 # App Download
 
-The Android app apk can be downloaded from https://drive.google.com/file/d/1Nl5R5la7kG9JTXcA-ktzFtUHDMQ2KiUW/view?usp=drive_link
+The Android app apk can be downloaded from https://drive.google.com/file/d/1ICM5Fad5ec31v030FLU8_lj1hcwwEjkN/view?usp=drive_link
 
 The iOS app can be provided if required and some setup is needed.
 

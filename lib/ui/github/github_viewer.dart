@@ -1,3 +1,4 @@
+import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -18,7 +19,8 @@ class GithubViewerState extends State<GithubViewer> {
   static const backEndUrl = 'https://github.com/malengatiger/test_backend';
   static const profileUrl = 'https://github.com/malengatiger';
 
-
+  static const mm = 'GitHub Viewer';
+  bool _busy = true;
   bool _showFrontEndRepo = true;
   late WebViewController controller;
   @override
@@ -55,6 +57,9 @@ class GithubViewerState extends State<GithubViewer> {
           },
           onPageFinished: (String url) {
             pp('page onPageFinished: $url');
+            setState(() {
+              _busy = false;
+            });
           },
           onHttpError: (HttpResponseError error) {
             pp('page HttpResponseError: ${error.response?.statusCode}');
@@ -82,11 +87,10 @@ class GithubViewerState extends State<GithubViewer> {
       appBar: AppBar(
         title: const Text('GitHub Viewer'),
         actions: [
-          IconButton(onPressed: (){
-            setState(() {
-              _showFrontEndRepo = !_showFrontEndRepo;
-            });
-          }, icon:  Icon(_showFrontEndRepo? Icons.flip_to_front: Icons.back_hand)),
+          _busy? const SizedBox(height: 14, width: 14, child: CircularProgressIndicator(
+            strokeWidth: 4, backgroundColor: Colors.pink,
+          ),): gapW8,
+          gapW16,
           const CircleAvatar(
             radius: 18.0,
             backgroundImage: AssetImage('assets/busha_logo.jpeg'),

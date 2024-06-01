@@ -72,7 +72,6 @@ class UserRegistrationWidgetState extends State<UserRegistrationWidget>
           var user = _prefs.getUser();
           if (user != null) {
             widget.onUserRegistered(user);
-            Navigator.of(context).pop();
           }
         }
       } else {
