@@ -11,14 +11,14 @@ The backend code lives at https://github.com/malengatiger/test_backend
 
 ## Features implemented:
 
-Landing Page
-User SignIn / Registration
-Latest Block
-Tezos Block
-Block Transactions
-Trending News
-My Assets
-Settings
+* Landing Page
+* User SignIn / Registration
+* Latest Block
+* Tezos Block
+* Block Transactions
+* Trending News
+* My Assets
+* Settings
 
 On first installation of the app the user has to register first. The email requested does not have to be a real email address. The address is merely used to authenticate the user and has no other purpose. If already registered the user can sign in instead.
 
