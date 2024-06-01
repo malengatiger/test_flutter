@@ -34,7 +34,11 @@ On first installation of the app the user has to register first. The email reque
 
 The App in Dark Mode ...
 
+## iOS app
+
 <img width="1103" alt="Screenshot 2024-06-01 at 09 50 25" src="https://github.com/malengatiger/test_flutter/assets/343710/75e0dd6f-06f4-46da-a884-2ebd741481a0">
+
+## Android app
 
 <img width="1451" alt="Screenshot 2024-06-01 at 13 42 08" src="https://github.com/malengatiger/test_flutter/assets/343710/e203ede6-380d-491a-a91e-74dff7f16140">
 
