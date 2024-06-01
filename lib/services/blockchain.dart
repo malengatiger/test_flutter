@@ -60,6 +60,9 @@ class BlockchainService {
       if (resp.statusCode == 200) {
         var mJson = jsonDecode(resp.body);
         block = TezosBlock.fromJson(mJson);
+      } else {
+        throw Exception('Failed to get Tezos block: Bad status code: ${resp.statusCode}');
+
       }
     } catch (e,s) {
       pp('$e $s');

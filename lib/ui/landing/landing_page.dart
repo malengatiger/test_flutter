@@ -8,6 +8,7 @@ import 'package:busha_app/ui/on_boarding/user_sign_in.dart';
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/prefs.dart';
+import 'package:busha_app/util/toasts.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -63,8 +64,13 @@ class LandingPageState extends State<LandingPage>
           if (mounted) {
             setState(() {});
           }
-          await Future.delayed(const Duration(milliseconds: 2000));
+          await Future.delayed(const Duration(milliseconds: 200));
           if (mounted) {
+            showToast(
+                message:
+                    'You are registered on the Busha Assessment App. \n\n🍎🍎🍎 Welcome aboard!! ',
+                context: context);
+            Navigator.of(context).pop();
             _navigateToDashboard();
           }
         }));
@@ -75,8 +81,15 @@ class LandingPageState extends State<LandingPage>
     NavigationUtils.navigateToPage(
         context: context,
         widget: UserSignInWidget(onUserSignedIn: (u) {
-          pp('$mm user is signed in ok: ${u.toJson()}');
-          _navigateToDashboard();
+          pp('$mm ... user is signed in ok: ${u.toJson()}');
+          if (mounted) {
+            showToast(
+                message:
+                    'You are signed in on the Busha Assessment App. \n\n🍎🍎🍎 Welcome back!! ',
+                context: context);
+            Navigator.of(context).pop();
+            _navigateToDashboard();
+          }
         }));
   }
 
@@ -125,8 +138,8 @@ class LandingPageState extends State<LandingPage>
 
   @override
   Widget build(BuildContext context) {
-    var style =
-    myTextStyle(context, Theme.of(context).primaryColor, 16, FontWeight.w900);
+    var style = myTextStyle(
+        context, Theme.of(context).primaryColor, 16, FontWeight.w900);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -134,8 +147,9 @@ class LandingPageState extends State<LandingPage>
           style: Theme.of(context).textTheme.bodySmall,
         ),
         actions: [
-          AnimatedBushaLogo(onTapped: (){
-            NavigationUtils.navigateToPage(context: context, widget: const SettingsWidget());
+          AnimatedBushaLogo(onTapped: () {
+            NavigationUtils.navigateToPage(
+                context: context, widget: const SettingsWidget());
           }),
         ],
       ),
@@ -149,27 +163,56 @@ class LandingPageState extends State<LandingPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(
-                            onPressed: () {
-                              _navigateToSignIn();
-                            },
-                            child: Text(
-                              'Sign In',
-                              style: myTextStyleMediumLarge(context, 20),
-                            )),
-                        TextButton(
-                            onPressed: () {
-                              _navigateToRegistration();
-                            },
-                            child: Text(
-                              'Register',
-                              style: myTextStyleMediumLarge(context, 20),
-                            )),
-                      ],
+                    Card(
+                      elevation: 8,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              height: 64,
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        _navigateToSignIn();
+                                      },
+                                      child: Text(
+                                        'Sign In',
+                                        style: myTextStyleMediumLarge(context, 20),
+                                      )),
+                                  Text(
+                                    'Go to your account',
+                                    style: myTextStyleSmallWithColor(
+                                        context, Colors.grey.shade700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 64,
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        _navigateToRegistration();
+                                      },
+                                      child: Text(
+                                        'Register',
+                                        style: myTextStyleMediumLarge(context, 20),
+                                      )),
+                                  Text(
+                                    'No account yet?',
+                                    style: myTextStyleSmallWithColor(
+                                        context, Colors.grey.shade700),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     gapH32,
                     AnimatedContainer(
@@ -188,22 +231,20 @@ class LandingPageState extends State<LandingPage>
                         onPressed: () {
                           _navigateToGitFrontEnd();
                         },
-                        child: Text('View Busha Flutter code on GitHub',
-                            style: style)),
+                        child:
+                            Text('Busha Flutter code on GitHub', style: style)),
                     TextButton(
                       onPressed: () {
                         _navigateToGitBackEnd();
                       },
-                      child: Text('View Busha Backend code on GitHub',
-                          style: style),
+                      child: Text('Busha Backend code on GitHub', style: style),
                     ),
                     gapH8,
                     TextButton(
                       onPressed: () {
                         _navigateToGitProfile();
                       },
-                      child: Text('View Developer Profile on GitHub',
-                          style: style),
+                      child: Text('Developer Profile on GitHub', style: style),
                     ),
                     gapH16,
                   ],

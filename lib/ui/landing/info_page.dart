@@ -1,10 +1,7 @@
 import 'package:busha_app/misc/settings.dart';
 import 'package:busha_app/services/auth.dart';
-import 'package:busha_app/ui/dashboard/dash_widget.dart';
 import 'package:busha_app/ui/github/github_viewer.dart';
 import 'package:busha_app/ui/landing/landing_page.dart';
-import 'package:busha_app/ui/on_boarding/user_registration.dart';
-import 'package:busha_app/ui/on_boarding/user_sign_in.dart';
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/navigation_util.dart';
 import 'package:busha_app/util/prefs.dart';
@@ -97,6 +94,9 @@ class InfoPageState extends State<InfoPage>
 
   @override
   Widget build(BuildContext context) {
+    var style =
+    myTextStyle(context, Theme.of(context).primaryColor, 16, FontWeight.w900);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -148,13 +148,13 @@ class InfoPageState extends State<InfoPage>
                           _navigateToGitFrontEnd();
                         },
                         child: Text('View Busha Flutter code on GitHub',
-                            style: myTextStyleMediumBoldPrimaryColor(context))),
+                            style: style)),
                     TextButton(
                       onPressed: () {
                         _navigateToGitBackEnd();
                       },
                       child: Text('View Busha Backend code on GitHub',
-                          style: myTextStyleMediumBoldPrimaryColor(context)),
+                          style: style),
                     ),
                     gapH8,
                     TextButton(
@@ -162,7 +162,7 @@ class InfoPageState extends State<InfoPage>
                         _navigateToGitProfile();
                       },
                       child: Text('View Developer Profile on GitHub',
-                          style: myTextStyleMediumBoldPrimaryColor(context)),
+                          style: style),
                     ),
                     gapH16,
                     ElevatedButton(

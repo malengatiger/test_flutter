@@ -105,6 +105,7 @@ class DashWidgetState extends State<DashWidget>
     var nf = NumberFormat('###,###,###,###');
     return Scaffold(
       appBar: AppBar(
+        leading: gapW8,
         title: Text(
           'Busha Dashboard',
           style: myTextStyleMediumBoldPrimaryColor(context),
@@ -278,7 +279,7 @@ class DashWidgetState extends State<DashWidget>
           BottomNavigationBarItem(
               icon: const Icon(
                 Icons.ac_unit,
-                color: Colors.amber,
+                color: Colors.pink,
               ),
               label: 'Tezos Block',
               tooltip: 'Get Tezos Block',

@@ -6,6 +6,7 @@ import 'package:busha_app/misc/settings.dart';
 import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/ui/on_boarding/user_form.dart';
 import 'package:busha_app/util/navigation_util.dart';
+import 'package:busha_app/util/prefs.dart';
 import 'package:busha_app/util/styles.dart';
 import 'package:busha_app/util/toasts.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,8 @@ class UserRegistrationWidgetState extends State<UserRegistrationWidget>
 
   final _formKey = GlobalKey<FormState>();
   final AuthService _authService = GetIt.instance<AuthService>();
+
+  final Prefs _prefs = GetIt.instance<Prefs>();
   static const mm = '🌿🌿 UserRegistrationWidget';
   bool _busy = false;
 
@@ -47,7 +50,11 @@ class UserRegistrationWidgetState extends State<UserRegistrationWidget>
     pp('$mm ........................ register user starting ...');
     if (!EmailValidator.validate(_emailController.text)) {
       pp('$mm _registerUser: EmailValidator says NO!');
-      showToast(message: 'Please enter properly formatted email address', context: context);
+      showToast(
+          backgroundColor: Colors.red.shade700,
+          textStyle: const TextStyle(color: Colors.white),
+          padding: 20.0,
+          message: 'Please enter properly formatted email address', context: context);
       return;
     }
     User user = User(
@@ -60,18 +67,21 @@ class UserRegistrationWidgetState extends State<UserRegistrationWidget>
     });
     try {
       var resp = await _authService.register(user);
-      if (resp.statusCode == 200 || resp.statusCode == 201) {
-        pp('$mm user registered?: 🍐 body: ${resp.body}');
+      if (resp) {
+        pp('$mm user registered: 🍐');
         if (mounted) {
-          var user = User.fromJson(jsonDecode(resp.body));
-          widget.onUserRegistered(user);
-          Navigator.of(context).pop();
+          var user = _prefs.getUser();
+          if (user != null) {
+            widget.onUserRegistered(user);
+            Navigator.of(context).pop();
+          }
         }
       } else {
         if (mounted) {
           showErrorDialog(
               message:
-                  'Bad registration response, statusCode: ${resp.statusCode}',
+                  'Registration failed. The email ${_emailController.text} is already in use. '
+                      '\n\nChange the email address or use another one. Please try again!',
               context: context);
         }
       }
@@ -114,7 +124,7 @@ class UserRegistrationWidgetState extends State<UserRegistrationWidget>
                 child: _busy
                     ? const Center(
                         child: BusyIndicator(
-                          caption: 'Busha signing you up so you can play with the app ',
+                          caption: 'Busha signing you up so you can play with the app and see whether it meets requirements. \n\n😎😎😎',
                         ),
                       )
                     : SingleChildScrollView(

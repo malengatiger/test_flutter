@@ -36,8 +36,9 @@ class Net {
       {required String path,
       required Map<String, dynamic> data,
       required String token}) async {
-    pp('$mm post: ... Calling $path - data: $data');
     var mUrl = '${getBushaUrl()}$path';
+    pp('$mm post: ... Calling $mUrl \ndata: $data');
+
     late http.Response resp;
     try {
       resp = await http.post(Uri.parse(mUrl), body: data);

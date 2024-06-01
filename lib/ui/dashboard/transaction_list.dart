@@ -138,7 +138,7 @@ class _TransactionListState extends State<TransactionList> {
     if (block != null) {
       pp(' ... time: ${block!.data!.time} date: $formatted');
     }
-
+    var height = MediaQuery.of(context).size.height - 100;
     return Scaffold(
       appBar: AppBar(
         title: const Text('BTC Transactions'),
@@ -162,120 +162,99 @@ class _TransactionListState extends State<TransactionList> {
           ),
           gapW16,
         ],
+        bottom: PreferredSize(preferredSize: const Size.fromHeight(120), child: Column(
+          children: [
+            gapH16,
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Row(
+                children: [
+                  Text(
+                    'Hash',
+                    style: myTextStyleTinyGrey(context),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(left: 24, right: 24),
+                      child: SizedBox(
+                          width: 260,
+                          child: Text(
+                            '${block?.data!.hash}',
+                            style: myTextStyleTiny(context),
+                          ))),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TransactionTotalWidget(
+                  title: 'Total Value', total: nf.format(total), size: 28.0),
+            ),
+            gapH16,
+          ],
+        )),
       ),
       body: SafeArea(
           child: Stack(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              gapH32,
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Hash',
-                      style: myTextStyleTinyGrey(context),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(left: 24, right: 24),
-                        child: SizedBox(
-                            width: 260,
-                            child: Flexible(
-                                child: Text(
-                              '${block?.data!.hash}',
-                              style: myTextStyleTiny(context),
-                            )))),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TransactionTotalWidget(
-                    title: 'Total Value', total: nf.format(total), size: 28.0),
-              ),
-              gapH16,
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: bd.Badge(
-                    badgeContent: Text(
-                      num,
-                      style: myTextStyle(
-                          context,
-                          mode == Brightness.dark ? Colors.white : Colors.white,
-                          12,
-                          FontWeight.w900),
-                    ),
-                    badgeStyle: const bd.BadgeStyle(
-                        padding: EdgeInsets.all(12.0),
-                        elevation: 16.0,
-                        badgeColor: Colors.pink),
-                    child: ListView.builder(
-                        itemCount: list.length,
-                        itemBuilder: (_, index) {
-                          var tx = list.elementAt(index);
+          ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (_, index) {
+                var tx = list.elementAt(index);
 
-                          return Card(
-                            elevation: 4,
-                            child: SizedBox(
-                              height: 120,
+                return Card(
+                  elevation: 4,
+                  child: SizedBox(
+                    height: 120,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Flexible(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Flexible(
-                                        child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 28, right: 28),
-                                        child: Text(
-                                          tx.hash!,
-                                          style: myTextStyleSmallWithColor(
-                                              context, Colors.grey.shade600),
-                                        ),
-                                      ),
-                                    )),
-                                    gapH16,
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 36.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            formatted,
-                                            style: mode == Brightness.light
-                                                ? myTextStyleSmallBold(
-                                                    context, Colors.black)
-                                                : myTextStyleSmallBold(context,
-                                                    Colors.grey.shade600),
-                                          ),
-                                          Text(
-                                            '${index + 1}',
-                                            style: myTextStyle(
-                                                context,
-                                                Theme.of(context).primaryColor,
-                                                14,
-                                                FontWeight.w900),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 28, right: 28),
+                                  child: Text(
+                                    tx.hash!,
+                                    style: myTextStyleSmallWithColor(
+                                        context, Colors.grey.shade600),
+                                  ),
                                 ),
-                              ),
+                              )),
+                          gapH16,
+                          Padding(
+                            padding:
+                            const EdgeInsets.only(left: 36.0),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  formatted,
+                                  style: mode == Brightness.light
+                                      ? myTextStyleSmallBold(
+                                      context, Colors.black)
+                                      : myTextStyleSmallBold(context,
+                                      Colors.grey.shade600),
+                                ),
+                                Text(
+                                  '${index + 1}',
+                                  style: myTextStyle(
+                                      context,
+                                      Theme.of(context).primaryColor,
+                                      14,
+                                      FontWeight.w900),
+                                )
+                              ],
                             ),
-                          );
-                        }),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
+                );
+              }),
           responseLength == null
               ? gapW16
               : Positioned(

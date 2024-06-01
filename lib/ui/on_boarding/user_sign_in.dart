@@ -45,6 +45,9 @@ class UserSignInWidgetState extends State<UserSignInWidget>
       pp('$mm _signInUser: EmailValidator says NO!');
       showToast(
           message: 'Please enter properly formatted email address',
+          backgroundColor: Colors.red.shade600,
+          textStyle: const TextStyle(color: Colors.white),
+          padding: 24.0,
           context: context);
       return;
     }
@@ -104,9 +107,9 @@ class UserSignInWidgetState extends State<UserSignInWidget>
               child: _busy
                   ? const Center(
                     child: BusyIndicator(
-                        caption:
-                            'Busha signing you up so you can play with the app ',
-                      ),
+                      caption: 'Busha signing you up so you can play with the app and see whether it meets requirements. \n\n😎😎😎',
+
+                    ),
                   )
                   : UserForm(
                       emailController: _emailController,

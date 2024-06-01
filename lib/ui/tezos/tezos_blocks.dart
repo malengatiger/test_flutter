@@ -3,7 +3,6 @@ import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/blockchain.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:badges/badges.dart' as bd;
 import '../../util/functions.dart';
 import '../../util/gaps.dart';
 import '../../util/navigation_util.dart';
@@ -43,7 +42,7 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
     try {
       block = await blockchainService.getTezosBlock(timestamp!);
       if (block != null) {
-        pp('$mm Tezos Block: '
+        pp('$mm Tezos Block is OK? : '
             '\n😡😡😡😡😡😡😡😡😡😡😡😡😡😡😡'
             '\n😡 hash: ${block!.hash} '
             '\n😡 timestamp: ${block!.timestamp} '
@@ -67,7 +66,14 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
 
   void getHourAgo() {
     var now = DateTime.now().subtract(const Duration(hours: 1));
-    timestamp = '${now.year}-${now.month}-${now.day}T${now.hour}:00';
+    var year = now.year;
+    var month = now.month;
+    var day = now.day;
+    var hour = now.hour;
+    var min = now.minute;
+
+    timestamp = '$year-${month < 10? '0${now.month}': now.month}-${day < 10? '0$day': '$day'}'
+        'T${hour < 10? '0$hour': hour}:00';
   }
   @override
   void dispose() {
