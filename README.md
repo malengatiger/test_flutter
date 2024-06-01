@@ -23,13 +23,6 @@ The backend code lives at https://github.com/malengatiger/test_backend
 On first installation of the app the user has to register first. The email requested does not have to be a real email address. The address is merely used to authenticate the user and has no other purpose. If already registered the user can sign in instead.
 
 
-
-
-
-
-
-
-
 # Mobile Dev Assessment App - a glance at the app!
 
 ## iOS app in Dark mode
@@ -44,5 +37,9 @@ On first installation of the app the user has to register first. The email reque
 ## iOS App in Light Mode ...
 
 <img width="1340" alt="Screenshot 2024-06-01 at 13 43 50" src="https://github.com/malengatiger/test_flutter/assets/343710/38c2199a-658a-4cb5-ba65-67db1dc7f542">
+
+The Android app apk can be downloaded from https://drive.google.com/file/d/1Nl5R5la7kG9JTXcA-ktzFtUHDMQ2KiUW/view?usp=drive_link
+
+The iOS app can be provided if required.
 
 
