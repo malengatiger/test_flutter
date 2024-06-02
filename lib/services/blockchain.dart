@@ -5,28 +5,31 @@ import 'package:busha_app/models/tezos/account.dart';
 import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/functions.dart';
-import 'package:get_it/get_it.dart';
 import 'package:welltested_annotation/welltested_annotation.dart';
 
 import '../models/next/block_transactions.dart';
 
-@Welltested()
+// @Welltested()
 class BlockchainService {
   static const mm = '🔷 🔷 🔷 BlockchainService';
-  late Net net;
+  final Net net;
+
+  BlockchainService(this.net);
 
   Future<Block?> getLatestBlock() async {
     pp('$mm ........................ getLatestBlock ...');
     Block? block;
-    net = GetIt.instance<Net>();
     try {
       var resp = await net.get('blockchain/getLatestBlock');
       if (resp.statusCode == 200 || resp.statusCode == 201) {
         block = Block.fromJson(jsonDecode(resp.body));
         pp('$mm getLatestBlock ...  🍐 \n block time: 🍐 ${block.data!.time}  🍐');
+      } else {
+        throw Exception('Get latest block failed: ${resp.statusCode}');
+
       }
-    } catch (e) {
-      pp(e);
+    } catch (e,s) {
+      pp('getLatestBlock ERROR: $e $s');
       throw Exception('Get latest block failed: $e');
     }
     return block;
@@ -34,7 +37,6 @@ class BlockchainService {
 
   Future<List<Account>> getTezosAccounts() async {
     List<Account> accounts = [];
-    net = GetIt.instance<Net>();
     try {
       var resp = await net.get('tezos/getAccounts');
       if (resp.statusCode == 200) {
@@ -53,7 +55,6 @@ class BlockchainService {
 
   Future<TezosBlock?> getTezosBlock(String timestamp) async {
     TezosBlock? block;
-    net = GetIt.instance<Net>();
     try {
       var resp = await net.get('tezos/getBlock?timestamp=$timestamp');
       if (resp.statusCode == 200) {
@@ -73,7 +74,6 @@ class BlockchainService {
 
   Future<BlockTransactions?> getBlockTransactions(String hash) async {
     pp('\n\n$mm ........................ getBlockTransactions, hash: $hash ...');
-    net = GetIt.instance<Net>();
     BlockTransactions? blockTransactions;
     try {
       var resp = await net.get('blockchain/getBlockTransactions?hash=$hash');

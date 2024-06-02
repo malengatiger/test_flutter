@@ -1,12 +1,11 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:busha_app/models/user.dart';
 import 'package:busha_app/services/auth.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart' as m_auth;
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
@@ -19,110 +18,65 @@ import 'auth_test.mocks.dart';
 // Generate mocks using:
 // flutter pub run build_runner build
 
-@GenerateMocks([
-  m_auth.FirebaseAuth,
-  m_auth.UserCredential,
-  m_auth.User,
-  Prefs,
-  Net,
-  Response
-])
+@GenerateMocks([m_auth.FirebaseAuth, m_auth.UserCredential, m_auth.User, Prefs, Net])
 void main() {
   late MockFirebaseAuth mockFirebaseAuth;
   late MockUserCredential mockUserCredential;
   late MockUser mockUser;
   late MockPrefs mockPrefs;
-  late MockNet mockNet;
   late AuthService authService;
+  late Net mockNet;
 
-  setUp(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  setUp(() {
+    // Initialize mocks
     mockFirebaseAuth = MockFirebaseAuth();
     mockUserCredential = MockUserCredential();
     mockUser = MockUser();
     mockPrefs = MockPrefs();
     mockNet = MockNet();
-    authService =
-        AuthService(mockFirebaseAuth); // Pass the mock FirebaseAuth instance
-// Initialize Firebase
-    when(authService.signIn('innfo@email.com', 'password'))
-        .thenAnswer((_) async =>
-        User(name: 'Aubrey', email: 'aubs@gmail.com'));
-    // Add this line to stub the saveUser method:
-    when(mockPrefs.saveUser(any)).thenAnswer((_) async {});
+    // Create AuthService instance with mock FirebaseAuth
+    authService = AuthService(mockFirebaseAuth, mockNet, mockPrefs);
+    when(mockPrefs.saveUser(any)).thenAnswer((_) async => null);
 
-    await Firebase.initializeApp();
+    // GetIt.instance.reset();
+    // GetIt.instance.registerLazySingleton<Net>(() => mockNet);
 
-    GetIt.instance.reset();
-    GetIt.instance.registerLazySingleton<Prefs>(() => mockPrefs);
-    GetIt.instance.registerLazySingleton<Net>(() => mockNet);
   });
 
   group('AuthService', () {
-    // test('signIn signs in user successfully', () async {
-    //   // Mock Firebase Auth to return a successful user credential.
-    //   when(mockFirebaseAuth.signInWithEmailAndPassword(
-    //       email: 'test@email.com', password: 'password'))
-    //       .thenAnswer((_) async => mockUserCredential);
-    //
-    //   when(mockUserCredential.user).thenReturn(mockUser);
-    //   when(mockUser.displayName).thenReturn('Test User');
-    //   when(mockUser.email).thenReturn('test@email.com');
-    //   when(mockUser.uid).thenReturn('test_uid');
-    //
-    //   when(mockPrefs.saveUser(any)).thenAnswer((_) async {});
-    //
-    //   // Call the signIn method.
-    //   final result = await authService.signIn('test@email.com', 'password');
-    //
-    //   // Verify that the user is signed in and the user object is returned.
-    //   expect(result, isA<User>());
-    //   expect(result?.email, 'test@email.com');
-    //   expect(result?.uid, 'test_uid');
-    //   // Verify that Prefs.saveUser is called.
-    //   verify(mockPrefs.saveUser(any));
-    // });
-    //
-    // // ... (Other tests for signIn, signOut, register, etc.)
-    //
-    // test('getUserByEmail fetches user data', () async {
-    //   // Mock Net to return a successful response.
-    //   final response = MockResponse();
-    //   when(response.statusCode).thenReturn(200);
-    //   when(response.body).thenReturn('{"user": "data"}');
-    //   when(mockNet.get(any)).thenAnswer((_) async => response);
-    //
-    //   // Mock _getToken to return a token.
-    //   when(mockFirebaseAuth.currentUser).thenReturn(mockUser);
-    //   when(mockUser.getIdToken()).thenAnswer((_) async => 'test_token');
-    //
-    //   // Call the getUserByEmail method.
-    //   final result = await authService.getUserByEmail('test@email.com');
-    //
-    //   // Verify that the result is the expected response.
-    //   expect(result, response);
-    // });
-    //
-    // test('isSignedIn returns true when user is signed in', () async {
-    //   // Mock FirebaseAuth to return a user.
-    //   when(m_auth.FirebaseAuth.instance.currentUser).thenReturn(mockUser);
-    //
-    //   // Call the isSignedIn method.
-    //   final result = await AuthService.isSignedIn();
-    //
-    //   // Verify that the result is true.
-    //   expect(result, true);
-    // });
-    //
-    // test('isSignedIn returns false when user is not signed in', () async {
-    //   // Mock FirebaseAuth to return null for currentUser.
-    //   when(m_auth.FirebaseAuth.instance.currentUser).thenReturn(null);
-    //
-    //   // Call the isSignedIn method.
-    //   final result = await AuthService.isSignedIn();
-    //
-    //   // Verify that the result is false.
-    //   expect(result, false);
-    // });
+    test('signs in user successfully', () async {
+      when(mockFirebaseAuth.signInWithEmailAndPassword(email: anyNamed('email'), password: anyNamed('password')))
+          .thenAnswer((_) async => mockUserCredential);
+      // Configure mockUser to simulate successful authentication
+      when(mockUserCredential.user).thenReturn(mockUser);
+      when(mockUser.displayName).thenReturn('Test User');
+      when(mockUser.email).thenReturn('test@email.com');
+      when(mockUser.uid).thenReturn('test_uid');
+
+      // Call the signIn method
+      final result = await authService.signIn('test@email.com', 'password');
+
+      // Verify the result
+      expect(result, isA<User>()); // Check if a User object is returned
+      expect(result?.email, 'test@email.com'); // Check email
+      expect(result?.uid, 'test_uid'); // Check uid
+
+    });
+
+    test('register user successfully', () async {
+      // Stub the mockNet.post method with matching arguments
+      var user = User(name: 'John',
+          email: 'john@gmail.com', password: 'pass778');
+      when(mockNet.post(
+          path: 'on-boarding/registerUser',
+          data: user.toJson(),
+          token: '' // Or provide the specific token if known
+      )).thenAnswer((_) async => Response(jsonEncode(user.toJson()), 200));
+
+      when(mockPrefs.saveUser(user)).thenAnswer((answer) async => null);
+      var ok = await authService.register(user);
+      expect(ok, true);
+    });
+
   });
 }

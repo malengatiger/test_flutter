@@ -32,10 +32,10 @@ class RegisterServices {
             () => NewsRefreshListener());
 
     GetIt.instance.registerLazySingleton<AuthService>(
-            () => AuthService(FirebaseAuth.instance));
+            () => AuthService(FirebaseAuth.instance, net, prefs));
 
     GetIt.instance.registerLazySingleton<BlockchainService>(
-            () => BlockchainService());
+            () => BlockchainService(net));
 
     GetIt.instance.registerLazySingleton<Prefs>(
             () => prefs);

@@ -18,8 +18,9 @@ class AuthService {
   static const mm = '🔑🔑🔑🔑🔑🔑 AuthService 🔑';
 
   final auth.FirebaseAuth firebaseAuth;
-  late Net net;
-  AuthService(this.firebaseAuth);
+  final Net net;
+  final Prefs prefs;
+  AuthService(this.firebaseAuth, this.net, this.prefs);
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -51,8 +52,6 @@ class AuthService {
 
     Response? response;
     // var mFirestore = fs.FirebaseFirestore.instance;
-    net = GetIt.instance<Net>();
-
     try {
       response = await net.post(
           path: 'on-boarding/registerUser', data: user.toJson(), token: '');
@@ -65,8 +64,14 @@ class AuthService {
           pp('$mm we are failing at something??? $failResp');
           return false;
         } else {
-          // var user = User.fromJson(jsonDecode(response.body));
-          // prefs.saveUser(user);
+          try {
+            var user = User.fromJson(jsonDecode(response.body));
+            prefs.saveUser(user);
+            pp('$mm we have cached ${user.toJson()}');
+
+          } catch (e,s) {
+            pp('$e $s');
+          }
           return true;
         }
 
@@ -97,7 +102,6 @@ class AuthService {
 
   Future<Response> getUserByEmail(String email) async {
     var token = await _getToken();
-    net = GetIt.instance<Net>();
     try {
       var response = await net.get('getUserByEmail');
       if (response.statusCode == 200 || response.statusCode == 201) {

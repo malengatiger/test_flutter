@@ -56,7 +56,7 @@ void main() {
 
     test('sayHello makes a GET request and prints the response', () async {
       // Mock the HTTP client to return a successful response.
-      final response = http.Response('Hello yourself, Boss!', 200);
+      final response = http.Response('Go fuck yourself, Boss!', 200);
       when(mockClient.get(any)).thenAnswer((_) async => response);
 
       // Call the sayHello method.
