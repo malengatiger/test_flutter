@@ -30,6 +30,7 @@ Future<void> main() async {
   try {
     var reg =
     RegisterServices(await SharedPreferences.getInstance());
+    reg.register();
   } catch (e) {
     pp('$mm Problem with RegisterServices? $e');
   }
