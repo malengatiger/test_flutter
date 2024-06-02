@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/prefs.dart';
-import 'package:firebase_auth/firebase_auth.dart' as m_auth;
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
@@ -15,17 +15,17 @@ import 'net.dart';
 class AuthService {
   static const localUrl = 'http://192.168.86.230:8080/';
   static const remoteUrl = 'https://busha-nest-1-ajtawuiiiq-ew.a.run.app/';
-  late Prefs prefs;
-  static const mm = '🔑 🔑 AuthService 🔑';
+  static const mm = '🔑🔑🔑🔑🔑🔑 AuthService 🔑';
 
+  final auth.FirebaseAuth firebaseAuth;
   late Net net;
-  AuthService();
+  AuthService(this.firebaseAuth);
 
   Future<User?> signIn(String email, String password) async {
     try {
-      var userCred = await m_auth.FirebaseAuth.instance
+      var userCred = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      pp('User is signed in OK? ${userCred.user?.email}, if null, not signed in');
+      pp('$mm User is signed in OK? ${userCred.user?.email}, if null, not signed in');
       if (userCred.user == null) {
         return null;
       }
@@ -34,8 +34,7 @@ class AuthService {
           email: userCred.user!.email,
           uid: userCred.user!.uid);
 
-      prefs = GetIt.instance<Prefs>();
-      await prefs.saveUser(mUser);
+      // await prefs.saveUser(mUser);
       return mUser;
     } catch (e, s) {
       pp('$e\n$s');
@@ -44,14 +43,14 @@ class AuthService {
   }
 
   Future signOut() async {
-    await m_auth.FirebaseAuth.instance.signOut();
+    await firebaseAuth.signOut();
   }
 
   Future<bool> register(User user) async {
     pp('$mm register: 🥬 ${user.toJson()}');
 
     Response? response;
-    var mFirestore = fs.FirebaseFirestore.instance;
+    // var mFirestore = fs.FirebaseFirestore.instance;
     net = GetIt.instance<Net>();
 
     try {
@@ -66,8 +65,8 @@ class AuthService {
           pp('$mm we are failing at something??? $failResp');
           return false;
         } else {
-          var user = User.fromJson(jsonDecode(response.body));
-          prefs.saveUser(user);
+          // var user = User.fromJson(jsonDecode(response.body));
+          // prefs.saveUser(user);
           return true;
         }
 
@@ -114,13 +113,13 @@ class AuthService {
   }
 
   static Future<bool> isSignedIn() async {
-    var user = m_auth.FirebaseAuth.instance.currentUser;
+    var user = auth.FirebaseAuth.instance.currentUser;
     var res = user == null ? false : true;
     pp('$mm User is signed in: $res');
     return res;
   }
 
   Future<String?> _getToken() async {
-    return m_auth.FirebaseAuth.instance.currentUser?.getIdToken();
+    return auth.FirebaseAuth.instance.currentUser?.getIdToken();
   }
 }

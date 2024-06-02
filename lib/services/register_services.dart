@@ -5,6 +5,7 @@ import 'package:busha_app/services/net.dart';
 import 'package:busha_app/services/news_service.dart';
 import 'package:busha_app/util/news_refresh_listener.dart';
 import 'package:busha_app/util/prefs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class RegisterServices {
             () => NewsRefreshListener());
 
     GetIt.instance.registerLazySingleton<AuthService>(
-            () => AuthService());
+            () => AuthService(FirebaseAuth.instance));
 
     GetIt.instance.registerLazySingleton<BlockchainService>(
             () => BlockchainService());
@@ -49,6 +50,6 @@ class RegisterServices {
         '🍎 [AuthService, BlockchainService, NewsService, NewsRefreshListener, ModeListener]  🍎🍎');
 
     //Say hello and see if backend is up!
-    net.sayHello();
+    // net.sayHello();
   }
 }

@@ -84,7 +84,7 @@ class InfoPageState extends State<InfoPage>
   }
 
   _logOut() async {
-    await AuthService.signOut();
+    //await AuthService.signOut();
     if (mounted) {
       Navigator.of(context).pop();
       NavigationUtils.navigateToPage(
