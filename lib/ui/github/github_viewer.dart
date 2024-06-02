@@ -1,4 +1,3 @@
-import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -21,7 +20,7 @@ class GithubViewerState extends State<GithubViewer> {
 
   static const mm = 'GitHub Viewer';
   bool _busy = true;
-  bool _showFrontEndRepo = true;
+  final bool _showFrontEndRepo = true;
   late WebViewController controller;
   @override
   void initState() {

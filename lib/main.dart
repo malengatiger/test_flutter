@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 
@@ -27,7 +28,8 @@ Future<void> main() async {
   pp('$mm ... Firebase initialized: ${app.name}');
   pp('$mm Firebase options: ${app.options.asMap}');
   try {
-    await RegisterServices.register();
+    var reg =
+    RegisterServices(await SharedPreferences.getInstance());
   } catch (e) {
     pp('$mm Problem with RegisterServices? $e');
   }

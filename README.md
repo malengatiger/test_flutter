@@ -14,8 +14,9 @@ The backend code lives at https://github.com/malengatiger/test_backend
 * Landing Page
 * User SignIn / Registration
 * Latest Block
-* Tezos Block
-* Block Transactions
+
+[//]: # (* Tezos Block)
+[//]: # (* Block Transactions)
 * Trending News
 * My Assets
 * Settings

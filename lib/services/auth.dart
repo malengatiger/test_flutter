@@ -4,19 +4,22 @@ import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart' as m_auth;
 import 'package:cloud_firestore/cloud_firestore.dart' as fs;
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
+import 'package:welltested_annotation/welltested_annotation.dart';
 
 import '../models/user.dart';
 import 'net.dart';
 
-//https://busha-nest-1-ajtawuiiiq-ew.a.run.app
+@Welltested()
 class AuthService {
   static const localUrl = 'http://192.168.86.230:8080/';
   static const remoteUrl = 'https://busha-nest-1-ajtawuiiiq-ew.a.run.app/';
-  final Prefs prefs;
+  late Prefs prefs;
   static const mm = '🔑 🔑 AuthService 🔑';
 
-  AuthService(this.prefs);
+  late Net net;
+  AuthService();
 
   Future<User?> signIn(String email, String password) async {
     try {
@@ -31,6 +34,7 @@ class AuthService {
           email: userCred.user!.email,
           uid: userCred.user!.uid);
 
+      prefs = GetIt.instance<Prefs>();
       await prefs.saveUser(mUser);
       return mUser;
     } catch (e, s) {
@@ -39,7 +43,7 @@ class AuthService {
     }
   }
 
-  static Future signOut() async {
+  Future signOut() async {
     await m_auth.FirebaseAuth.instance.signOut();
   }
 
@@ -48,9 +52,10 @@ class AuthService {
 
     Response? response;
     var mFirestore = fs.FirebaseFirestore.instance;
-    //response.body {"response":{"message":"Error: The email address is already in use by another account.","error":"Unauthorized","statusCode":401},"status":401,"options":{},"message":"Error: The email address is already in use by another account.","name":"UnauthorizedException"}
+    net = GetIt.instance<Net>();
+
     try {
-      response = await Net.post(
+      response = await net.post(
           path: 'on-boarding/registerUser', data: user.toJson(), token: '');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -93,9 +98,9 @@ class AuthService {
 
   Future<Response> getUserByEmail(String email) async {
     var token = await _getToken();
-
+    net = GetIt.instance<Net>();
     try {
-      var response = await Net.get('getUserByEmail');
+      var response = await net.get('getUserByEmail');
       if (response.statusCode == 200 || response.statusCode == 201) {
         pp('$mm User found 🥬 status is OK!!: 🥬 ${response.body}');
       } else {
