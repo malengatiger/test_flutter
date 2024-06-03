@@ -1,6 +1,8 @@
 
 # Busha Demo App for Assessment
 
+![flutter](https://github.com/malengatiger/test_flutter/assets/343710/52b764c1-77d8-4ebf-84a9-0d9d9d37daae)
+
 ## Description
 
 This repository contains a **Flutter** application that implements the requirements as indicated for assessment. The app supports both **Android** and **iOS** devices. It can be dynamically set to dark or light mode. The user can also dynamically set the primary color that the app uses.
