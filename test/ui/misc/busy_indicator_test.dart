@@ -43,7 +43,6 @@ void main() {
         (WidgetTester tester) async {
       await tester.pumpWidget(
           const MaterialApp(home: BusyIndicator(showTimerOnly: true)));
-
       // Verify that only the elapsed time and progress indicator are present
       expect(find.byType(CircularProgressIndicator), findsOne);
       // Verify that other elements like caption and clock are not present
