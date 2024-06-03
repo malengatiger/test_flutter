@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 pp(msg) {
   if (kDebugMode) {
@@ -24,4 +25,33 @@ showErrorDialog(
       ],
     );
   });
+}
+
+Color getFontColorForBackground(Color background) {
+  return (background.computeLuminance() > 0.179)? Colors.black : Colors.white;
+}
+
+bool isColorDark(Color color) {
+  if (color.computeLuminance() > 0.179) {
+    return false;
+  }
+  return true;
+}
+String getFormattedUnixDateLong(int unixDate) {
+  var date = DateTime.fromMillisecondsSinceEpoch(unixDate);
+  final DateFormat formatter = DateFormat('EEEE, yyyy-MMMM-dd HH:mm');
+  final String formatted = formatter.format(date);
+  return formatted;
+}
+String getFormattedUnixDateMedium(int unixDate) {
+  var date = DateTime.fromMillisecondsSinceEpoch(unixDate);
+  final DateFormat formatter = DateFormat('yyyy-MMM-dd HH:mm');
+  final String formatted = formatter.format(date);
+  return formatted;
+}
+String getFormattedUnixDateShort(int unixDate) {
+  var date = DateTime.fromMillisecondsSinceEpoch(unixDate);
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+  final String formatted = formatter.format(date);
+  return formatted;
 }

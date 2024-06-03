@@ -68,8 +68,10 @@ class LandingPageState extends State<LandingPage>{
             showToast(
                 duration: const Duration(milliseconds: 5000),
                 backgroundColor: Colors.indigo.shade700,
+                textStyle: const TextStyle(color: Colors.white),
+                padding: 20.0,
                 message:
-                    'You are registered on the Busha Assessment App. \n\n🍎🍎🍎 Welcome aboard!! ',
+                    'You are registered on the Busha Assessment App. \n\n\n🍎🍎🍎 Welcome aboard!! ',
                 context: context);
             _navigateToDashboard();
           }
@@ -89,7 +91,7 @@ class LandingPageState extends State<LandingPage>{
                 backgroundColor: Colors.indigo.shade700,
                 textStyle: const TextStyle(color: Colors.white),
                 message:
-                    'You are signed in on the Busha Assessment App. \n\n🍎🍎🍎 Welcome back!! ',
+                    'You are signed in on the Busha Assessment App. \n\n\n🍎🍎🍎 Welcome back!! ',
                 context: context);
             _navigateToDashboard();
           }

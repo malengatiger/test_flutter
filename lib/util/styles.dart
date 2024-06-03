@@ -121,7 +121,7 @@ TextStyle myTextStyleTinyGrey(BuildContext context) {
     textStyle: Theme.of(context).textTheme.bodySmall,
     fontWeight: FontWeight.normal,
     color: Colors.grey.shade700,
-    fontSize: 10,
+    fontSize: 12,
   );
 }
 

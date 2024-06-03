@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:busha_app/misc/dark_light_control.dart';
 import 'package:busha_app/models/mode_and_color.dart';
+import 'package:busha_app/models/user.dart';
 import 'package:busha_app/services/register_services.dart';
+import 'package:busha_app/ui/dashboard/dash_widget.dart';
 import 'package:busha_app/ui/landing/landing_page.dart';
 import 'package:busha_app/ui/on_boarding/color_gallery.dart';
 import 'package:busha_app/util/functions.dart';
@@ -47,8 +49,11 @@ class MyApp extends StatelessWidget {
     ModeListener dlc = GetIt.instance<ModeListener>();
     Prefs prefs = GetIt.instance<Prefs>();
     ModeAndColor modeColor = prefs.getModeAndColor();
+    User? user = prefs.getUser();
     Color mColor = getColors().elementAt(modeColor.colorIndex!);
-
+    if (user != null) {
+      pp('$mm user exists, on to the Dashboard! 🌍🌍${user.toJson()} 🌍🌍');
+    }
     return StreamBuilder<ModeAndColor>(
         stream: dlc.darkLightStream,
         builder: (_, snapshot) {
@@ -74,7 +79,7 @@ class MyApp extends StatelessWidget {
             title: "Busha Demo",
             // home: const TezosBlockWidget(),
             // home: const TezosAccounts(),
-            home: const LandingPage(),
+            home: user == null? const LandingPage() : const DashWidget(),
           );
         });
   }

@@ -32,6 +32,13 @@ class AuthService {
           name: userCred.user!.displayName,
           email: userCred.user!.email,
           uid: userCred.user!.uid);
+      try {
+        prefs.saveUser(mUser);
+        pp('$mm we have cached ${mUser.toJson()}');
+
+      } catch (e,s) {
+        pp('$e $s');
+      }
 
       // await prefs.saveUser(mUser);
       return mUser;

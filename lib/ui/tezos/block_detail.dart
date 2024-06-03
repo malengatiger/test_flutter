@@ -109,7 +109,6 @@ class BlockDetail extends StatelessWidget {
                 ),
                 gapH32,
                 gapH32,
-                gapH32,
                 GestureDetector(
                   onTap: (){
                     showToast(
@@ -125,8 +124,7 @@ class BlockDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-                gapH32,
-
+                gapH64,
               ],
             ),
           ),

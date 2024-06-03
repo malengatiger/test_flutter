@@ -8,6 +8,7 @@ import 'package:busha_app/ui/news/article_viewer.dart';
 import 'package:busha_app/ui/news/news_widget.dart';
 import 'package:busha_app/ui/dashboard/top_movers_carousel.dart';
 import 'package:busha_app/ui/dashboard/transaction_list.dart';
+import 'package:busha_app/ui/tezos/tezos_accounts.dart';
 import 'package:busha_app/ui/tezos/tezos_blocks.dart';
 import 'package:busha_app/util/carousel_data.dart';
 import 'package:busha_app/util/gaps.dart';
@@ -96,6 +97,11 @@ class DashWidgetState extends State<DashWidget>
 
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
+  }
+
+  _navigateToAccountsList() {
+    NavigationUtils.navigateToPage(
+        context: context, widget: const TezosAccounts());
   }
 
   @override
@@ -273,31 +279,32 @@ class DashWidgetState extends State<DashWidget>
         ],
       )),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.ac_unit,
-                color: Colors.pink,
-              ),
-              label: 'Tezos Block',
-              tooltip: 'Get Tezos Block',
-              backgroundColor: Theme.of(context).primaryColorLight),
+            icon: Icon(
+              Icons.ac_unit,
+              color: Colors.pink,
+            ),
+            label: 'Tezos',
+            tooltip: 'Get Tezos Block',
+          ),
           BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.cloud_download,
-                color: Colors.green,
-              ),
-              label: 'Latest Block',
-              tooltip: 'Get Latest Block',
-              backgroundColor: Theme.of(context).primaryColorLight),
+            icon: Icon(
+              Icons.cloud_download,
+              color: Colors.green,
+            ),
+            label: 'Latest',
+            tooltip: 'Get Latest Block',
+          ),
           BottomNavigationBarItem(
-              icon: const Icon(
-                Icons.cloud_download,
-                color: Colors.blue,
-              ),
-              label: 'Transactions',
-              tooltip: 'Get Block Transactions',
-              backgroundColor: Theme.of(context).primaryColorLight),
+            icon: Icon(
+              Icons.cloud_download,
+              color: Colors.blue,
+            ),
+            label: 'Transactions',
+            tooltip: 'Get Block Transactions',
+          ),
+          
         ],
         elevation: 8,
         onTap: (index) {
@@ -311,6 +318,9 @@ class DashWidgetState extends State<DashWidget>
               break;
             case 2:
               _navigateToTransactionList();
+              break;
+            case 3:
+              _navigateToAccountsList();
               break;
           }
         },

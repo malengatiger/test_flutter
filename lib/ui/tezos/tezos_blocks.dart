@@ -1,6 +1,9 @@
 import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/blockchain.dart';
+import 'package:busha_app/ui/tezos/account_home.dart';
+import 'package:busha_app/ui/tezos/tezos_accounts.dart';
+import 'package:busha_app/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import '../../util/functions.dart';
@@ -33,6 +36,7 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
   }
 
   String? timestamp;
+
   void _getBlock() async {
     setState(() {
       _busy = true;
@@ -53,7 +57,7 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
       } else {
         pp('$mm Boss, we just got fucked!, block is null');
       }
-    } catch (e,s) {
+    } catch (e, s) {
       pp('$e\n$s');
       if (mounted) {
         showErrorDialog(message: 'Error: $e', context: context);
@@ -72,29 +76,35 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
     var hour = now.hour;
     var min = now.minute;
 
-    timestamp = '$year-${month < 10? '0${now.month}': now.month}-${day < 10? '0$day': '$day'}'
-        'T${hour < 10? '0$hour': hour}:00';
+    timestamp =
+        '$year-${month < 10 ? '0${now.month}' : now.month}-${day < 10 ? '0$day' : '$day'}'
+        'T${hour < 10 ? '0$hour' : hour}:00';
   }
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
+
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tezos Block Details'),
         actions: [
-          IconButton(onPressed: (){
-            getHourAgo();
-            _getBlock();
-          }, icon: const Icon(Icons.refresh)),
+          IconButton(
+              onPressed: () {
+                getHourAgo();
+                _getBlock();
+              },
+              icon: const Icon(Icons.refresh)),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               _navigateToLanding();
             },
             child: const CircleAvatar(
@@ -105,26 +115,50 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
           gapW8,
         ],
       ),
-      body:  SafeArea(
+      body: SafeArea(
           child: Stack(
         children: [
           SingleChildScrollView(
-            child: Column(mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                gapH32,
-                block == null? gapH32:Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: BlockDetail(tezosBlock: block!),
-                ),
+                gapH32,gapH32,
+                block == null
+                    ? gapH32
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: BlockDetail(tezosBlock: block!),
+                      ),
               ],
             ),
           ),
-          _busy? const Positioned(child: Center(
-            child: BusyIndicator(
-              caption: 'Loading Tezos block',
-            ),
-          )): gapH8,
+           Positioned(
+              left: 8, bottom: 0,
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Theme.of(context).primaryColor),
+                    elevation: const WidgetStatePropertyAll(16.0),
+                  ),
+                  onPressed: (){
+              NavigationUtils.navigateToPage(
+                  context: context, widget: const TezosAccounts());
+
+          }, child:  Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: SizedBox(
+                width: 180,
+                child: Text('Tezos Accounts', style: myTextStyleMediumBold(context),)),
+          ))),
+          _busy
+              ? const Positioned(
+                  child: Center(
+                  child: BusyIndicator(
+                    caption: 'Loading Tezos block',
+                  ),
+                ))
+              : gapH8,
+          
         ],
       )),
     );

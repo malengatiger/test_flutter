@@ -183,9 +183,7 @@ class _BusyIndicatorState extends State<BusyIndicator> {
                                   isKeepTime: true,
                                   child: const Align(
                                     alignment: FractionalOffset(0.5, 0.75),
-                                    child: Text(
-                                      'GMT+2',
-                                    ), //todo - use country db to set this
+                                    child: gapW16,
                                   ),
                                 ),
                               ),

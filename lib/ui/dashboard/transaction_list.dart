@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import '../../services/blockchain.dart';
 import '../../util/functions.dart';
 import '../landing/info_page.dart';
+import 'package:badges/badges.dart' as bd;
 
 class TransactionList extends StatefulWidget {
   const TransactionList({super.key, this.block});
@@ -138,6 +139,12 @@ class _TransactionListState extends State<TransactionList> {
       pp(' ... time: ${block!.data!.time} date: $formatted');
     }
     var height = MediaQuery.of(context).size.height - 100;
+    late Color textColor;
+    if (isColorDark(Theme.of(context).primaryColor)) {
+      textColor = Colors.white;
+    } else {
+      textColor = Colors.black;
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('BTC Transactions'),
@@ -161,55 +168,71 @@ class _TransactionListState extends State<TransactionList> {
           ),
           gapW16,
         ],
-        bottom: PreferredSize(preferredSize: const Size.fromHeight(120), child: Column(
-          children: [
-            gapH16,
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Row(
-                children: [
-                  Text(
-                    'Hash',
-                    style: myTextStyleTinyGrey(context),
+        bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(120),
+            child: Column(
+              children: [
+                gapH16,
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Hash',
+                        style: myTextStyleTinyGrey(context),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 24, right: 24),
+                          child: SizedBox(
+                              width: 260,
+                              child: Text(
+                                '${block?.data!.hash}',
+                                style: myTextStyleTiny(context),
+                              ))),
+                    ],
                   ),
-                  Padding(
-                      padding: const EdgeInsets.only(left: 24, right: 24),
-                      child: SizedBox(
-                          width: 260,
-                          child: Text(
-                            '${block?.data!.hash}',
-                            style: myTextStyleTiny(context),
-                          ))),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TransactionTotalWidget(
-                  title: 'Total Value', total: nf.format(total), size: 28.0),
-            ),
-            gapH16,
-          ],
-        )),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TransactionTotalWidget(
+                      title: 'Total Value',
+                      total: nf.format(total),
+                      size: 28.0),
+                ),
+                gapH16,
+              ],
+            )),
       ),
       body: SafeArea(
           child: Stack(
         children: [
-          ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (_, index) {
-                var tx = list.elementAt(index);
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, right: 16),
+            child: bd.Badge(
+              position: bd.BadgePosition.topEnd(top: 2, end: -12),
+              badgeContent: Text(
+                nf.format(list.length),
+                style: const TextStyle(color: Colors.white),
+              ),
+              badgeStyle: const bd.BadgeStyle(
+                padding: EdgeInsets.all(16),
+                badgeColor: Colors.red,
+              ),
+              child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (_, index) {
+                    var tx = list.elementAt(index);
 
-                return Card(
-                  elevation: 4,
-                  child: SizedBox(
-                    height: 120,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Flexible(
-                              child: Padding(
+                    return Card(
+                      elevation: 4,
+                      child: SizedBox(
+                        height: 120,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Flexible(
+                                  child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -221,62 +244,85 @@ class _TransactionListState extends State<TransactionList> {
                                   ),
                                 ),
                               )),
-                          gapH16,
-                          Padding(
-                            padding:
-                            const EdgeInsets.only(left: 36.0),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  formatted,
-                                  style: mode == Brightness.light
-                                      ? myTextStyleSmallBold(
-                                      context, Colors.black)
-                                      : myTextStyleSmallBold(context,
-                                      Colors.grey.shade600),
+                              gapH16,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 36.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      formatted,
+                                      style: mode == Brightness.light
+                                          ? myTextStyleSmallBold(
+                                              context, Colors.black)
+                                          : myTextStyleSmallBold(
+                                              context, Colors.grey.shade600),
+                                    ),
+                                    Text(
+                                      '${index + 1}',
+                                      style: myTextStyle(
+                                          context,
+                                          Theme.of(context).primaryColor,
+                                          14,
+                                          FontWeight.w900),
+                                    )
+                                  ],
                                 ),
-                                Text(
-                                  '${index + 1}',
-                                  style: myTextStyle(
-                                      context,
-                                      Theme.of(context).primaryColor,
-                                      14,
-                                      FontWeight.w900),
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
+            ),
+          ),
           responseLength == null
               ? gapW16
               : Positioned(
                   left: 8,
                   bottom: 8,
-                  child: Card(
-                    color: Colors.teal,
-                    elevation: 8,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Size of Response',
-                            style:
-                                myTextStyleSmallBold(context, Colors.black),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        responseLength = null;
+                      });
+                    },
+                    child: Card(
+                      color: Theme.of(context).primaryColor,
+                      elevation: 12,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SizedBox(
+                          height: 52,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Size of Response',
+                                    style: myTextStyleSmallBold(
+                                        context, textColor),
+                                  ),
+                                  gapW16,
+                                  Text(
+                                    '${responseLength!} MB',
+                                    style: myTextStyle(context, textColor, 20,
+                                        FontWeight.w900),
+                                  ),
+                                ],
+                              ),
+                              gapH8,
+                              Text(
+                                'Tap to remove',
+                                style: myTextStyle(context, textColor, 12,
+                                    FontWeight.normal),
+                              ),
+                            ],
                           ),
-                          gapW16,
-                          Text(
-                            '${responseLength!} MB',
-                            style: myTextStyleMediumLarge(context, 20),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   )),

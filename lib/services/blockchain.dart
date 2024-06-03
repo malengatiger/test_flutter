@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:busha_app/models/block.dart';
 import 'package:busha_app/models/tezos/account.dart';
+import 'package:busha_app/models/tezos/account_contract.dart';
+import 'package:busha_app/models/tezos/account_operation.dart';
 import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/functions.dart';
 
 import '../models/next/block_transactions.dart';
+import '../models/tezos/balance.dart';
 
 // @Welltested()
 class BlockchainService {
@@ -70,6 +73,84 @@ class BlockchainService {
 
     return block;
   }
+  Future<int> getBalance(String address) async {
+    int balance = 0;
+    try {
+      var resp = await net.get('tezos/getBalance?address=$address');
+      if (resp.statusCode == 200) {
+        balance = int.parse(resp.body);
+      } else {
+        throw Exception(
+            'Failed to getBalance: Bad status code: ${resp.statusCode}');
+      }
+    } catch (e, s) {
+      pp('$e $s');
+      throw Exception('Failed to getBalance: $e');
+    }
+
+    return balance;
+  }
+  Future<List<Balance>> getBalanceHistory(String address) async {
+    List<Balance> balances = [];
+    try {
+      var resp = await net.get('tezos/getBalanceHistory?address=$address');
+      if (resp.statusCode == 200) {
+        List mJson = jsonDecode(resp.body);
+        for (var json in mJson) {
+          balances.add(Balance.fromJson(json));
+        }
+      } else {
+        throw Exception(
+            'Failed to getBalanceHistory: Bad status code: ${resp.statusCode}');
+      }
+    } catch (e, s) {
+      pp('$e $s');
+      throw Exception('Failed to getBalanceHistory: $e');
+    }
+
+    return balances;
+  }
+  Future<List<AccountOperation>> getAccountOperations(String address) async {
+    List<AccountOperation> balances = [];
+    try {
+      var resp = await net.get('tezos/getAccountOperations?address=$address');
+      if (resp.statusCode == 200) {
+        List mJson = jsonDecode(resp.body);
+        for (var json in mJson) {
+          balances.add(AccountOperation.fromJson(json));
+        }
+      } else {
+        throw Exception(
+            'Failed to getAccountOperations: Bad status code: ${resp.statusCode}');
+      }
+    } catch (e, s) {
+      pp('$e $s');
+      throw Exception('Failed to getAccountOperations: $e');
+    }
+
+    return balances;
+  }
+  Future<List<AccountContract>> getAccountContracts(String address) async {
+    List<AccountContract> balances = [];
+    try {
+      var resp = await net.get('tezos/getAccountContracts?address=$address');
+      if (resp.statusCode == 200) {
+        List mJson = jsonDecode(resp.body);
+        for (var json in mJson) {
+          balances.add(AccountContract.fromJson(json));
+        }
+      } else {
+        throw Exception(
+            'Failed to getAccountContracts: Bad status code: ${resp.statusCode}');
+      }
+    } catch (e, s) {
+      pp('$e $s');
+      throw Exception('Failed to getAccountContracts: $e');
+    }
+
+    return balances;
+  }
+
 
   Future<BlockTransactions?> getBlockTransactions(String hash) async {
     pp('\n\n$mm ........................ getBlockTransactions, hash: $hash ...');

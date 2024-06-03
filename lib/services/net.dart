@@ -18,7 +18,7 @@ class Net {
 
   static String getBushaUrl() {
     if (kDebugMode) {
-      return _prodSkunkUrl; //TODO - change back to local after test
+      return _devSkunkUrl; //TODO - change back to local after test
     } else {
       return _prodSkunkUrl;
     }
