@@ -9,7 +9,7 @@ This repository contains a **Flutter** application that implements the requireme
 
 The app accesses the various endpoints referenced through a connection to a **GCP** hosted **NodeJS** backend application built with **NestJS**. Authentication is provided via **Firebase**. 
 
-The backend code lives at https://github.com/malengatiger/test_backend
+The backend application that provides the API lives at https://github.com/malengatiger/test_backend
 
 ## Features implemented:
 
