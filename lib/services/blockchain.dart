@@ -5,7 +5,6 @@ import 'package:busha_app/models/tezos/account.dart';
 import 'package:busha_app/models/tezos/tezos_block.dart';
 import 'package:busha_app/services/net.dart';
 import 'package:busha_app/util/functions.dart';
-import 'package:welltested_annotation/welltested_annotation.dart';
 
 import '../models/next/block_transactions.dart';
 

@@ -155,7 +155,7 @@ class _BusyIndicatorState extends State<BusyIndicator> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text('Elapsed Time: '),
+                        const Text('Elapsed Time:'),
                         gapW16,
                         Text(
                           elapsedTime,

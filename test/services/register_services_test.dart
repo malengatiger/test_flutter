@@ -11,7 +11,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'register_services_test.mocks.dart';
@@ -37,7 +36,7 @@ void main() {
       // Call the register method.
       var reg = RegisterServices(mockSharedPreferences);
 
-      reg.register();
+      await reg.register();
       // Verify that all services are registered.
       expect(GetIt.instance.isRegistered<Net>(), true);
       expect(GetIt.instance.isRegistered<NewsRefreshListener>(), true);

@@ -26,16 +26,15 @@ class LandingPage extends StatefulWidget {
   LandingPageState createState() => LandingPageState();
 }
 
-class LandingPageState extends State<LandingPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  static const mm = '🌍 🌍 LandingPage 🍎';
+class LandingPageState extends State<LandingPage>{
+  // late AnimationController _controller;
+  static const mm = '🌍🌍🌍🌍 LandingPage 🍎';
   AuthService authService = GetIt.instance<AuthService>();
   Prefs prefs = GetIt.instance<Prefs>();
 
   @override
   void initState() {
-    _controller = AnimationController(vsync: this);
+    // _controller = AnimationController(vsync: this);
     super.initState();
     _checkStatus();
   }
@@ -43,8 +42,8 @@ class LandingPageState extends State<LandingPage>
   _checkStatus() async {
     pp('$mm ... checking Firebase Auth status ...');
     user = prefs.getUser();
-    await Future.delayed(const Duration(milliseconds: 100));
-    if (await AuthService.isSignedIn()) {
+    // await Future.delayed(const Duration(milliseconds: 100));
+    if (await authService.isSignedIn()) {
       _navigateToDashboard();
       return;
     }
@@ -136,7 +135,7 @@ class LandingPageState extends State<LandingPage>
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -219,13 +218,10 @@ class LandingPageState extends State<LandingPage>
                       ),
                     ),
                     gapH32,
-                    AnimatedContainer(
-                        duration: const Duration(milliseconds: 2000),
-                        curve: Curves.bounceIn,
-                        child: Image.asset(
-                          'assets/banner1.webp',
-                          fit: BoxFit.fill,
-                        )),
+                    Image.asset(
+                      'assets/banner1.webp',
+                      fit: BoxFit.fill,
+                    ),
                     gapH32,
                     const Padding(
                       padding: EdgeInsets.all(8.0),

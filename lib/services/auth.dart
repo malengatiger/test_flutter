@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:busha_app/util/functions.dart';
 import 'package:busha_app/util/prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:cloud_firestore/cloud_firestore.dart' as fs;
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 import 'package:welltested_annotation/welltested_annotation.dart';
 
@@ -116,7 +114,7 @@ class AuthService {
     }
   }
 
-  static Future<bool> isSignedIn() async {
+   Future<bool> isSignedIn() async {
     var user = auth.FirebaseAuth.instance.currentUser;
     var res = user == null ? false : true;
     pp('$mm User is signed in: $res');

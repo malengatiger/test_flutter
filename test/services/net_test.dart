@@ -1,4 +1,3 @@
-import 'package:busha_app/util/functions.dart' as functions;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
@@ -7,8 +6,6 @@ import 'package:busha_app/services/net.dart';
 
 import 'register_services_test.mocks.dart';
 
-
-// Generate mocks using:
 // flutter pub run build_runner build
 
 @GenerateMocks([http.Client])
@@ -21,10 +18,10 @@ void main() {
     net = Net(mockClient);
   });
 
-  group('HTTP Network', () {
+  group('HTTP Network Tests', () {
 
 
-    test('get makes a GET request and returns the response', () async {
+    test('make a GET request and return a response', () async {
       // Mock the HTTP client to return a successful response.
       final response = http.Response('Success', 200);
       when(mockClient.get(any)).thenAnswer((_) async => response);
@@ -39,7 +36,7 @@ void main() {
       expect(result, response);
     });
 
-    test('post makes a POST request and returns the response', () async {
+    test('make a POST request and returns a response', () async {
       // Mock the HTTP client to return a successful response.
       final response = http.Response('Success', 200);
       when(mockClient.post(any, body: anyNamed('body'))).thenAnswer((_) async => response);
@@ -54,7 +51,7 @@ void main() {
       expect(result, response);
     });
 
-    test('sayHello makes a GET request and prints the response', () async {
+    test('sayHello makes a hello request and prints the response', () async {
       // Mock the HTTP client to return a successful response.
       final response = http.Response('Go fuck yourself, Boss!', 200);
       when(mockClient.get(any)).thenAnswer((_) async => response);
