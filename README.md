@@ -26,7 +26,7 @@ The backend code lives at https://github.com/malengatiger/test_backend
 On first installation of the app the user has to register first. The email requested does not have to be a real email address. The address is merely used to authenticate the user and has no other purpose. If already registered the user can sign in instead.
 
 
-## Mobile Dev Assessment App - a glance at the app!
+## A glimpse of the app ....
 
 ### iOS app in Dark mode
 
