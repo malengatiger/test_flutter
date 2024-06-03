@@ -39,6 +39,11 @@ On first installation of the app the user has to register first. The email reque
 
 <img width="1340" alt="Screenshot 2024-06-01 at 13 43 50" src="https://github.com/malengatiger/test_flutter/assets/343710/38c2199a-658a-4cb5-ba65-67db1dc7f542">
 
+## Unit and Widget Tests
+
+<img width="1427" alt="Screenshot 2024-06-03 at 07 41 34" src="https://github.com/malengatiger/test_flutter/assets/343710/f11c2276-21be-4f92-874e-16d8c4da5b9c">
+
+
 # App Download
 
 The Android app apk can be downloaded from https://drive.google.com/file/d/1ICM5Fad5ec31v030FLU8_lj1hcwwEjkN/view?usp=drive_link
