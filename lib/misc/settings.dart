@@ -25,20 +25,20 @@ class SettingsWidgetState extends State<SettingsWidget> {
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    loadSettings();
   }
 
-  late ModeAndColor _modeAndColor;
+  late ModeAndColor modeAndColor;
 
-  Future<void> _loadSettings() async {
-    _modeAndColor = prefs.getModeAndColor();
+  Future<void> loadSettings() async {
+    modeAndColor = prefs.getModeAndColor();
     await Future.delayed(const Duration(milliseconds: 100));
     setState(() {});
   }
 
-  Future<void> _saveModeAndColor() async {
-    prefs.saveModeAndColor(_modeAndColor);
-    modeListener.setMode(_modeAndColor);
+  Future<void> saveModeAndColor() async {
+    prefs.saveModeAndColor(modeAndColor);
+    modeListener.setMode(modeAndColor);
 
     setState(() {});
   }
@@ -73,14 +73,14 @@ class SettingsWidgetState extends State<SettingsWidget> {
                       title: const Text('Mode and Color'),
                       tiles: [
                         SettingsTile.switchTile(
-                          title: Text(_modeAndColor.mode == mDARKMode ? 'Dark Mode' : 'Light Mode'),
+                          title: Text(modeAndColor.mode == mDARKMode ? 'Dark Mode' : 'Light Mode'),
                           leading: const Icon(Icons.brightness_2),
                           onToggle: (value) {
-                            _modeAndColor.mode = value? mDARKMode : mLIGHTMode;
-                            pp(' onToggle: _modeAndColor setting: ${_modeAndColor.toJson()}');
-                            _saveModeAndColor();
+                            modeAndColor.mode = value? mDARKMode : mLIGHTMode;
+                            pp(' onToggle: _modeAndColor setting: ${modeAndColor.toJson()}');
+                            saveModeAndColor();
                           },
-                          initialValue: _modeAndColor.mode == mDARKMode? true: false,
+                          initialValue: modeAndColor.mode == mDARKMode? true: false,
                         ),
                       ],
                     ),
@@ -91,8 +91,8 @@ class SettingsWidgetState extends State<SettingsWidget> {
                   height: 480,
                   child: ColorGallery(
                     onColorSelected: (index) {
-                      _modeAndColor.colorIndex = index;
-                      _saveModeAndColor();
+                      modeAndColor.colorIndex = index;
+                      saveModeAndColor();
                     },
                   )),
               gapH32,
