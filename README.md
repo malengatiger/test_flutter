@@ -7,7 +7,7 @@
 
 This repository contains a **Flutter** application that implements the requirements as indicated for assessment. The app supports both **Android** and **iOS** devices. It can be dynamically set to dark or light mode. The user can also dynamically set the primary color that the app uses.
 
-The app accesses the various endpoints referenced through a connection to a **GCP** hosted **NodeJS** backend application built with **NestJS**. Authentication is provided via **Firebase**. 
+The app accesses the various endpoints referenced through a connection to a **GCP** hosted **NodeJS** backend application built with the **NestJS** framework. Authentication for users is provided via **Firebase**. 
 
 The backend application that provides the API lives at https://github.com/malengatiger/test_backend
 
