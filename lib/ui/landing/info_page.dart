@@ -184,5 +184,5 @@ class InfoPageState extends State<InfoPage>
 
 const desc = '''
 Welcome to the Busha Mobile Dev Assessment app! This app is built using Flutter for the front end, with a robust backend powered by NodeJS, NestJS, and Firebase, all hosted as a Docker container on Google Cloud Run.
-\nThe app runs on iOS and Android.
+\nThe app runs on iOS and Android devices.
 ''';

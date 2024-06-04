@@ -111,7 +111,7 @@ class _CryptoCardState extends State<CryptoCard>
                       SuffixWidget(
                         upArrow: widget.upArrow,
                         percentage: widget.percentage,
-                        fontSize: 16,
+                        fontSize: 16, width: 100,
                       ),
                     ],
                   ),
@@ -130,10 +130,10 @@ class SuffixWidget extends StatelessWidget {
       {super.key,
       required this.upArrow,
       required this.percentage,
-      required this.fontSize});
+      required this.fontSize, required this.width});
 
   final bool upArrow;
-  final double percentage, fontSize;
+  final double percentage, fontSize, width;
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +162,7 @@ class SuffixWidget extends StatelessWidget {
       color: arrowBackgroundColor,
     );
     return Container(
-      width: 140,
+      width: width,
       color: containerColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

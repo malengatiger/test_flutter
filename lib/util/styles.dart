@@ -274,6 +274,12 @@ TextStyle myTextStyleLarge(BuildContext context) {
       fontWeight: FontWeight.w900,
       fontSize: 20);
 }
+TextStyle myTextStyleLargeGrey(BuildContext context) {
+  return GoogleFonts.roboto(
+      textStyle: Theme.of(context).textTheme.headlineLarge,
+      fontWeight: FontWeight.w900, color: Colors.grey.shade800,
+      fontSize: 20);
+}
 
 TextStyle myTextStyleLargeWithColor(BuildContext context, Color color) {
   return GoogleFonts.roboto(

@@ -29,8 +29,8 @@ class TopMoverItem extends StatelessWidget {
     return Card(
       elevation: 8,
       child: SizedBox(
-        height: 64,
-        width: 160,
+        height: 32,
+        width: 120,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,25 +41,26 @@ class TopMoverItem extends StatelessWidget {
               gapH16,
               SvgPicture.asset(
                 carouselData.imagePath,
-                height: 48,
-                width: 48,
+                height: 44,
+                width: 44,
               ),
               gapH8,
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     carouselData.name,
-                    style: myTextStyleMedium(context),
+                    style: myTextStyleSmall(context),
                   ),
                 ],
               ),
-              gapH8,
+              // gapH8,
               Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  
                   SuffixWidget(
                     upArrow: carouselData.upArrow,
                     percentage: carouselData.percentage,
-                    fontSize: fontSize,
+                    fontSize: fontSize, width: 84,
                   ),
                 ],
               ),

@@ -26,7 +26,7 @@ class TopMoversCarousel extends StatelessWidget {
                   textStyle: const TextStyle(color: Colors.white),
                   message: ' 🍐 🍐 🍐 Details are not available yet. Feature under construction ...', context: context);
             },
-            child: TopMoverItem(carouselData: cd, fontSize: 20, index: index + 1,));
+            child: TopMoverItem(carouselData: cd, fontSize: 12, index: index + 1,));
       }),
     );
   }

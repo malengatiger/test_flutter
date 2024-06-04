@@ -138,7 +138,7 @@ class DashWidgetState extends State<DashWidget>
                     children: [
                       Text(
                         'My Assets',
-                        style: myTextStyleLarge(context),
+                        style: myTextStyleLargeGrey(context),
                       ),
                       TextButton(
                         onPressed: () {},
@@ -214,7 +214,7 @@ class DashWidgetState extends State<DashWidget>
                     children: [
                       Text(
                         'Today\'s Top Movers',
-                        style: myTextStyleLarge(context),
+                        style: myTextStyleLargeGrey(context),
                       ),
                       bd.Badge(
                         badgeContent: Text(
@@ -247,7 +247,7 @@ class DashWidgetState extends State<DashWidget>
                         // gapW16,
                         Text(
                           'Trending News',
-                          style: myTextStyleLarge(context),
+                          style: myTextStyleLargeGrey(context),
                         ),
                         Text(
                           'Tap to refresh the news',
@@ -304,7 +304,7 @@ class DashWidgetState extends State<DashWidget>
             label: 'Transactions',
             tooltip: 'Get Block Transactions',
           ),
-          
+
         ],
         elevation: 8,
         onTap: (index) {
