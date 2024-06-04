@@ -1,11 +1,14 @@
+import 'package:busha_app/misc/busy_indicator.dart';
 import 'package:busha_app/services/blockchain.dart';
 import 'package:busha_app/ui/tezos/account_detail.dart';
 import 'package:busha_app/ui/tezos/account_home.dart';
+import 'package:busha_app/ui/tezos/balance_param_dropdown.dart';
 import 'package:busha_app/ui/tezos/tezos_blocks.dart';
 import 'package:busha_app/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:badges/badges.dart' as bd;
+import 'package:intl/intl.dart';
 import '../../misc/settings.dart';
 import '../../models/tezos/account.dart';
 import '../../util/functions.dart';
@@ -35,22 +38,28 @@ class TezosAccountsState extends State<TezosAccounts>
     _getAccounts();
   }
 
+  int balanceParam = 1000000;
+  int limit = 50;
+
   void _getAccounts() async {
     setState(() {
-      _busy = false;
+      _busy = true;
     });
-    accounts = await blockchainService.getTezosAccounts();
-    for (var m in accounts) {
-      pp('$mm Tezos Account: '
+    try {
+      accounts = await blockchainService.getTezosAccounts(
+          balanceParam: balanceParam, limit: limit);
+      pp('$mm _getAccounts: Tezos Accounts: '
           '\n🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎🍎'
-          '\n🍎 address: ${m.address} '
-          '\n🍎 balance: ${m.balance} '
-          '\n🍎 transactions: ${m.numTransactions} '
-          '\n🍎 firstActivityTime: ${m.firstActivityTime} '
-          '\n🍎 lastActivityTime: ${m.lastActivityTime}');
+          '\n🍎 accounts: ${accounts.length} '
+          '\n🍎 ');
+    } catch (e, s) {
+      pp('$e \n$s');
+      if (mounted) {
+        showErrorDialog(message: 'E', context: context);
+      }
     }
     setState(() {
-      _busy = true;
+      _busy = false;
     });
   }
 
@@ -68,12 +77,15 @@ class TezosAccountsState extends State<TezosAccounts>
   _navigateToLanding() {
     NavigationUtils.navigateToPage(context: context, widget: const InfoPage());
   }
+
   _navigateToAccountHome(Account account) {
     NavigationUtils.navigateToPage(
         context: context, widget: AccountHome(account: account));
   }
+
   @override
   Widget build(BuildContext context) {
+    var nf = NumberFormat('###,###,###,###');
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -102,21 +114,40 @@ class TezosAccountsState extends State<TezosAccounts>
             child: Column(
               children: [
                 gapH32,
-                Row(mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Tezos Accounts', style: myTextStyleLargerPrimaryColor(context),),
+                    Text(
+                      'Tezos Accounts',
+                      style: myTextStyleLargerPrimaryColor(context),
+                    ),
                     gapW32,
                     bd.Badge(
-
                       badgeStyle: const bd.BadgeStyle(
-                          padding: EdgeInsets.all(12),
-                          elevation: 16
-                      ),
+                          padding: EdgeInsets.all(12), elevation: 16),
                       badgeContent: Text(
                         '${accounts.length}',
                         style: const TextStyle(color: Colors.white),
                       ),
                     ),
+                  ],
+                ),
+                gapH32,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    balanceParam == 0
+                        ? gapW32
+                        : Text(
+                            nf.format(balanceParam),
+                            style: myTextStyleLarge(context),
+                          ),
+                    gapW32,
+                    BalanceParamDropdown(onChanged: (m) {
+                      balanceParam = m;
+                      _getAccounts();
+                    }),
+                    gapW32,
                   ],
                 ),
                 gapH32,
@@ -128,16 +159,27 @@ class TezosAccountsState extends State<TezosAccounts>
                         itemBuilder: (_, index) {
                           var acc = accounts[index];
                           return GestureDetector(
-                              onTap: (){
+                              onTap: () {
                                 _navigateToAccountHome(acc);
                               },
-                              child: AccountDetail(account: acc, index: index + 1,));
+                              child: AccountDetail(
+                                account: acc,
+                                index: index + 1,
+                              ));
                         }),
                   ),
                 ),
               ],
             ),
-          )
+          ),
+          _busy
+              ? const Positioned(
+                  child: Center(
+                  child: BusyIndicator(
+                    caption: 'Loading Tezos Accounts',
+                  ),
+                ))
+              : gapH16,
         ],
       )),
     );

@@ -11,6 +11,7 @@ import '../../util/gaps.dart';
 import '../../util/navigation_util.dart';
 import '../landing/info_page.dart';
 import 'block_detail.dart';
+import 'package:busha_app/util/functions.dart';
 
 class TezosBlockWidget extends StatefulWidget {
   const TezosBlockWidget({super.key});
@@ -93,9 +94,12 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = Colors.black;
+    if (isColorDark(Theme.of(context).primaryColor)) {
+      textColor = Colors.white;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tezos Block Details'),
         actions: [
           IconButton(
               onPressed: () {
@@ -123,7 +127,12 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
               // mainAxisAlignment: MainAxisAlignment.center,
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                gapH32,gapH32,
+                gapH32,
+                Text(
+                  'Tezos Block Details',
+                  style: myTextStyleLargerPrimaryColor(context),
+                ),
+                gapH32,
                 block == null
                     ? gapH32
                     : Padding(
@@ -133,23 +142,27 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
               ],
             ),
           ),
-           Positioned(
-              left: 8, bottom: 0,
+          block == null? gapH16: Positioned(
+              left: 16,
+              bottom: 24,
               child: ElevatedButton(
                   style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Theme.of(context).primaryColor),
+                    backgroundColor:
+                        WidgetStatePropertyAll(Theme.of(context).primaryColor),
                     elevation: const WidgetStatePropertyAll(16.0),
                   ),
-                  onPressed: (){
-              NavigationUtils.navigateToPage(
-                  context: context, widget: const TezosAccounts());
-
-          }, child:  Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: SizedBox(
-                width: 180,
-                child: Text('Tezos Accounts', style: myTextStyleMediumBold(context),)),
-          ))),
+                  onPressed: () {
+                    NavigationUtils.navigateToPage(
+                        context: context, widget: const TezosAccounts());
+                  },
+                  child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SizedBox(
+                        width: 180,
+                        child: Text('Tezos Accounts',
+                            style: myTextStyle(
+                                context, textColor, 20, FontWeight.normal)),
+                      )))),
           _busy
               ? const Positioned(
                   child: Center(
@@ -158,7 +171,6 @@ class TezosBlockWidgetState extends State<TezosBlockWidget>
                   ),
                 ))
               : gapH8,
-          
         ],
       )),
     );

@@ -32,8 +32,10 @@ class AccountOperations extends StatelessWidget {
                     ),
                     gapW32,
                     bd.Badge(
-                      badgeContent: Text('${accountOperations.length}',
-                        style: const TextStyle(color: Colors.white),),
+                      badgeContent: Text(
+                        '${accountOperations.length}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                       badgeStyle: bd.BadgeStyle(
                         padding: const EdgeInsets.all(12),
                         badgeColor: Colors.teal.shade700,
@@ -43,7 +45,14 @@ class AccountOperations extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
+                child: accountOperations.isEmpty
+                    ? Center(
+                  child: Text(
+                    'No Operations found',
+                    style: myTextStyleLarge(context),
+                  ),
+                )
+                    :ListView.builder(
                     itemCount: accountOperations.length,
                     itemBuilder: (_, index) {
                       var c = accountOperations[index];
@@ -66,8 +75,8 @@ class AccountOperations extends StatelessWidget {
                                     style: myTextStyle(
                                         context,
                                         Colors.blue.shade700,
-                                        22,
-                                        FontWeight.w900),
+                                        18,
+                                        FontWeight.normal),
                                   ),
                                 ],
                               ),
@@ -112,20 +121,23 @@ class AccountOperations extends StatelessWidget {
                                     'Baker Fee',
                                     style: myTextStyleTinyGrey(context),
                                   ),
-                                  c.bakerFee! == 0? Text(
-                                    '0',style: myTextStyle(
-                                      context,
-                                      Colors.grey.shade700,
-                                      16,
-                                      FontWeight.w900),
-                                  ): Text(
-                                    nf.format(c.bakerFee),
-                                    style: myTextStyle(
-                                        context,
-                                        Colors.amber.shade700,
-                                        22,
-                                        FontWeight.w900),
-                                  ),
+                                  c.bakerFee! == 0
+                                      ? Text(
+                                          '0',
+                                          style: myTextStyle(
+                                              context,
+                                              Colors.grey.shade700,
+                                              16,
+                                              FontWeight.w900),
+                                        )
+                                      : Text(
+                                          nf.format(c.bakerFee),
+                                          style: myTextStyle(
+                                              context,
+                                              Colors.amber.shade700,
+                                              22,
+                                              FontWeight.w900),
+                                        ),
                                 ],
                               ),
                               gapH8,
@@ -139,29 +151,37 @@ class AccountOperations extends StatelessWidget {
                                   ),
                                   Text(
                                     nf.format(c.gasUsed),
-                                    style: myTextStyle(context, Colors.red, 16,
-                                        FontWeight.w900),
+                                    style: myTextStyle(context, Colors.pink, 14,
+                                        FontWeight.normal),
                                   ),
                                 ],
                               ),
                               gapH16,
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Allocation Fee',
                                     style: myTextStyleTinyGrey(context),
                                   ),
-                                  c.allocationFee! == 0? Text('0', style: myTextStyle(
-                                      context,
-                                      Colors.grey.shade700,
-                                      16,
-                                      FontWeight.w900),):Text(nf.format(c.allocationFee), style: myTextStyle(
-                                      context,
-                                      Colors.green.shade700,
-                                      20,
-                                      FontWeight.w900),),
+                                  c.allocationFee! == 0
+                                      ? Text(
+                                          '0',
+                                          style: myTextStyle(
+                                              context,
+                                              Colors.grey.shade700,
+                                              16,
+                                              FontWeight.w900),
+                                        )
+                                      : Text(
+                                          nf.format(c.allocationFee),
+                                          style: myTextStyle(
+                                              context,
+                                              Colors.green.shade700,
+                                              20,
+                                              FontWeight.w900),
+                                        ),
                                 ],
                               ),
                               Row(
@@ -178,7 +198,7 @@ class AccountOperations extends StatelessWidget {
                                   ),
                                 ],
                               ),
-
+                              gapH16,
                             ],
                           ),
                         ),

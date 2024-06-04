@@ -28,21 +28,37 @@ class BlockchainService {
         pp('$mm getLatestBlock ...  🍐 \n block time: 🍐 ${block.data!.time}  🍐');
       } else {
         throw Exception('Get latest block failed: ${resp.statusCode}');
-
       }
-    } catch (e,s) {
+    } catch (e, s) {
       pp('getLatestBlock ERROR: $e $s');
       throw Exception('Get latest block failed: $e');
     }
     return block;
   }
 
-  Future<List<Account>> getTezosAccounts() async {
+  //http://localhost:8080/tezos/getAccounts?balanceParam=10000000&limit=3
+  //BlockchainService response: 200 - {"code":400,"errors":{"balance.gt":"Invalid integer value."}}
+  Future<List<Account>> getTezosAccounts(
+      {required int balanceParam, required int limit}) async {
     List<Account> accounts = [];
     try {
-      var resp = await net.get('tezos/getAccounts');
+      var s1 = 'tezos/getAccounts?balanceParam=$balanceParam';
+      s1 = '$s1&limit=$limit';
+      pp('$mm ....... getTezosAccounts: path: $s1');
+      var resp = await net.get(s1);
+      pp('$mm response, statusCode: ${resp.statusCode} - ${resp.body}');
       if (resp.statusCode == 200) {
+        try {
+          Map<String, dynamic> json = jsonDecode(resp.body);
+          if (json.containsKey('code')) {
+            pp('$mm ... error encountered: $json');
+            throw Exception(resp.body);
+          }
+        } catch (e, s) {
+          // pp('$e \n$s');
+        }
         List mList = jsonDecode(resp.body);
+        pp('$mm ... seems OK?: ${mList.length} records found');
         for (var json in mList) {
           var acc = Account.fromJson(json);
           accounts.add(acc);
@@ -73,6 +89,7 @@ class BlockchainService {
 
     return block;
   }
+
   Future<int> getBalance(String address) async {
     int balance = 0;
     try {
@@ -90,6 +107,7 @@ class BlockchainService {
 
     return balance;
   }
+
   Future<List<Balance>> getBalanceHistory(String address) async {
     List<Balance> balances = [];
     try {
@@ -110,6 +128,7 @@ class BlockchainService {
 
     return balances;
   }
+
   Future<List<AccountOperation>> getAccountOperations(String address) async {
     List<AccountOperation> balances = [];
     try {
@@ -130,6 +149,7 @@ class BlockchainService {
 
     return balances;
   }
+
   Future<List<AccountContract>> getAccountContracts(String address) async {
     List<AccountContract> balances = [];
     try {
@@ -150,7 +170,6 @@ class BlockchainService {
 
     return balances;
   }
-
 
   Future<BlockTransactions?> getBlockTransactions(String hash) async {
     pp('\n\n$mm ........................ getBlockTransactions, hash: $hash ...');

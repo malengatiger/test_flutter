@@ -45,7 +45,7 @@ class AccountHomeState extends State<AccountHome>
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      pp('$mm what are we listening for?');
+      pp('$mm what are we listening for? 😡 index: ${_tabController.index} 😡previousIndex: ${_tabController.previousIndex}');
     });
     super.initState();
     _getData();
@@ -88,13 +88,14 @@ class AccountHomeState extends State<AccountHome>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Home'),
+        title: const Text('Account Details'),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
             Tab(text: 'Balances'),
-            Tab(text: 'Contracts'),
             Tab(text: 'Operations'),
+            Tab(text: 'Contracts'),
+
           ],
         ),
         actions: [
@@ -127,6 +128,7 @@ class AccountHomeState extends State<AccountHome>
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
+                    gapH16,
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text('${widget.account.address}', style: myTextStyleTinyGrey(context),),
@@ -137,9 +139,10 @@ class AccountHomeState extends State<AccountHome>
                         controller: _tabController,
                         children: [
                           BalanceHistory(balances: balances),
-                          ContractList(accountContracts: accountContracts),
                           AccountOperations(
                               accountOperations: accountOperations),
+                          ContractList(accountContracts: accountContracts),
+
                         ],
                       ),
                     ),

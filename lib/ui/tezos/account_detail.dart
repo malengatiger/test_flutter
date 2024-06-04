@@ -42,12 +42,10 @@ class AccountDetail extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                        width: 300,
-                        child: Text(
-                          '${account.address}',
-                          style: myTextStyleTinyGrey(context),
-                        )),
+                    Text(
+                      '${account.address}',
+                      style: myTextStyleTinyGrey(context),
+                    ),
                     Text(
                       '$index',
                       style: myTextStyleSmallBoldPrimaryColor(context),
